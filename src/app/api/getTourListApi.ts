@@ -20,12 +20,12 @@ export const getTourListApi = async (
   };
 
   try {
-    console.log('🔍 Request params:', params); // 요청 파라미터 확인
-    const response = await axios.get('/api/tourlist', { params });
-    console.log('✅ Response:', response.data); // 응답 확인
+    const response = await axios.get('/api/tourlist', { 
+      params,
+      timeout: 10000,
+    });
 
     const items = response.data?.response?.body?.items?.item ?? [];
-
     const list = Array.isArray(items) ? items : [items];
 
     return list.map((item: AreaItem) => ({
@@ -39,7 +39,15 @@ export const getTourListApi = async (
       contentid: item.contentid ?? '',
     }));
   } catch (error) {
-    console.error('Tour API Error:', error);
-    throw new Error('데이터를 불러오는 중 오류가 발생했습니다.');
+    if (axios.isAxiosError(error)) {
+      console.error('❌ [getTourListApi] Axios Error:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
+    } else {
+      console.error('❌ [getTourListApi] Error:', error);
+    }
+    throw new Error('관광지 데이터를 불러오는 중 오류가 발생했습니다.');
   }
 };

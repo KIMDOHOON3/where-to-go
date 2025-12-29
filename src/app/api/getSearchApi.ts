@@ -7,7 +7,9 @@ export const getSearchApi = async (
   numOfRows: number,
   contentTypeId: string | null
 ): Promise<SearchApiResponse[]> => {
-  if (!keyword) return [];
+  if (!keyword) {
+    return [];
+  }
 
   const params = Object.fromEntries(
     Object.entries({
@@ -18,12 +20,16 @@ export const getSearchApi = async (
     }).filter(([, v]) => v !== null && v !== undefined && v !== '')
   );
 
+
   try {
-    // ✅ 내부 API 호출
-    const response = await axios.get('/api/search', { params });
+    const response = await axios.get('/api/search', { 
+      params,
+      timeout: 10000,
+    });
 
     const items = response.data?.response?.body?.items?.item ?? [];
     const list = Array.isArray(items) ? items : [items];
+
 
     return list.map((item) => ({
       title: item.title ?? '',
@@ -35,7 +41,15 @@ export const getSearchApi = async (
       tel: item.tel ?? '',
     }));
   } catch (error) {
-    console.error('Search API Error:', error);
-    throw new Error('데이터를 불러오는 중 오류가 발생했습니다.');
+    if (axios.isAxiosError(error)) {
+      console.error('❌ [getSearchApi] Axios Error:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
+    } else {
+      console.error('❌ [getSearchApi] Error:', error);
+    }
+    throw new Error('검색 데이터를 불러오는 중 오류가 발생했습니다.');
   }
 };

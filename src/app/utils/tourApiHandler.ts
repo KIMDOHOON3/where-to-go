@@ -1,4 +1,4 @@
-// app/api/utils/tourApiHandler.ts
+// app/utils/tourApiHandler.ts
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
@@ -51,47 +51,80 @@ export async function handleTourApiRequest(
     return NextResponse.json({ message: 'Service key not configured' }, { status: 500 });
   }
 
-  try {
-    const response = await axios.get(
-      `https://apis.data.go.kr/B551011/KorService2/${config.endpoint}`,
-      {
-        params: {
-          ...params,
-          serviceKey,
-          MobileOS: 'ETC',
-          MobileApp: 'AppTest',
-          _type: 'json',
-        },
-        timeout: 10000,
-      }
-    );
 
+  const decodedServiceKey = decodeURIComponent(serviceKey);
+  const apiUrl = `https://apis.data.go.kr/B551011/KorService2/${config.endpoint}`;
+  
+  const apiParams = {
+    ...params,
+    serviceKey: decodedServiceKey,
+    MobileOS: 'ETC',
+    MobileApp: 'AppTest',
+    _type: 'json',
+  };
+
+  try {
+    const response = await axios.get(apiUrl, {
+      params: apiParams,
+      timeout: 10000,
+    });
+    
     // 공공데이터 API 에러 체크
     const resultCode = response.data?.response?.header?.resultCode;
+    const resultMsg = response.data?.response?.header?.resultMsg;
+    
+
     if (resultCode && resultCode !== '0000') {
-      console.error('API Error:', response.data?.response?.header);
+      console.error('❌ [TourAPI] API returned error:', {
+        code: resultCode,
+        message: resultMsg,
+        fullHeader: response.data?.response?.header
+      });
+      
       return NextResponse.json(
         {
           message: 'API Error',
           code: resultCode,
-          detail: response.data?.response?.header?.resultMsg,
+          detail: resultMsg,
         },
         { status: 500 }
       );
     }
 
     return NextResponse.json(response.data);
+    
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error('Axios Error:', {
+      console.error('❌ [TourAPI] Axios Error:', {
         endpoint: config.endpoint,
         status: error.response?.status,
+        statusText: error.response?.statusText,
         data: error.response?.data,
         message: error.message,
+        code: error.code,
       });
+
+      // 상세 에러 응답
+      return NextResponse.json(
+        { 
+          message: 'Tour API Error',
+          detail: error.message,
+          status: error.response?.status,
+          apiError: error.response?.data
+        }, 
+        { status: 500 }
+      );
+    } else if (error instanceof Error) {
+      return NextResponse.json(
+        { 
+          message: 'Tour API Error',
+          detail: error.message
+        }, 
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ message: 'Tour API Error' }, { status: 500 });
+    return NextResponse.json({ message: 'Unknown error occurred' }, { status: 500 });
   }
 }
 
