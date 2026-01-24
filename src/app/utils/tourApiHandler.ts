@@ -1,6 +1,7 @@
 // app/utils/tourApiHandler.ts
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { API_CONFIG } from '@/app/constant/apiConstants';
 
 interface ValidationRule {
   condition: (params: Record<string, string>) => boolean;
@@ -46,21 +47,18 @@ export async function handleTourApiRequest(
   }
 
   // Service Key 확인
-  const serviceKey = process.env.TOUR_API_KEY;
+  const serviceKey = API_CONFIG.SERVICE_KEY;
   if (!serviceKey) {
     return NextResponse.json({ message: 'Service key not configured' }, { status: 500 });
   }
 
-
   const decodedServiceKey = decodeURIComponent(serviceKey);
-  const apiUrl = `https://apis.data.go.kr/B551011/KorService2/${config.endpoint}`;
-  
+  const apiUrl = `${API_CONFIG.BASE_URL}/${config.endpoint}`;
+
   const apiParams = {
     ...params,
     serviceKey: decodedServiceKey,
-    MobileOS: 'ETC',
-    MobileApp: 'AppTest',
-    _type: 'json',
+    ...API_CONFIG.DEFAULT_PARAMS,
   };
 
   try {
