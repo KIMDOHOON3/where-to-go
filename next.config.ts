@@ -2,10 +2,13 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['tong.visitkorea.or.kr'],
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    minimumCacheTTL: 60,
+    unoptimized: true, // Vercel 무료 플랜 이미지 최적화 제한 회피
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'tong.visitkorea.or.kr',
+      },
+    ],
   },
 };
 
