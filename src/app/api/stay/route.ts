@@ -1,8 +1,9 @@
 import { handleTourApiRequest, commonValidations } from '@/app/utils/tourApiHandler';
+import { API_ENDPOINTS } from '@/app/constant/apiConstants';
 
 export async function GET(req: Request) {
   return handleTourApiRequest(req, {
-    endpoint: 'searchStay2',
+    endpoint: API_ENDPOINTS.STAY,
     validations: [commonValidations.lDongSignguCd],
   });
 }

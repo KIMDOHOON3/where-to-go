@@ -1,8 +1,9 @@
-import { handleTourApiRequest} from '@/app/utils/tourApiHandler';
+import { handleTourApiRequest } from '@/app/utils/tourApiHandler';
+import { API_ENDPOINTS } from '@/app/constant/apiConstants';
 
 export async function GET(req: Request) {
   return handleTourApiRequest(req, {
-    endpoint: 'locationBasedList2',
+    endpoint: API_ENDPOINTS.LOCATION_BASED,
     requiredParams: ['mapX', 'mapY', 'radius'],
   });
 }
