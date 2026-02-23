@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,7 +18,7 @@ interface ItemTypes {
   onClick: () => void;
 }
 
-export default function AreaSlideProps({ item, onClick }: ItemTypes) {
+const AreaSlideProps = React.memo(({ item, onClick }: ItemTypes) => {
   const { heartStates, toggleHeart } = useLike();
   return (
     <>
@@ -76,4 +77,8 @@ export default function AreaSlideProps({ item, onClick }: ItemTypes) {
       </div>
     </>
   );
-}
+});
+
+AreaSlideProps.displayName = 'AreaSlideProps';
+
+export default AreaSlideProps;

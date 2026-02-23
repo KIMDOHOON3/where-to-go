@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import createKakaoMapURL from '@/app/utils/createKakaoMapURL';
@@ -11,7 +12,7 @@ interface AccomdationCardProps {
   onClick: () => void;
 }
 
-export default function AccomdationCard({ stay, onClick }: AccomdationCardProps) {
+const AccomdationCard = React.memo(({ stay, onClick }: AccomdationCardProps) => {
   return (
     <div className="rounded-lg bg-white shadow-md" onClick={onClick}>
       <div className="relative aspect-[4/3]">
@@ -51,4 +52,8 @@ export default function AccomdationCard({ stay, onClick }: AccomdationCardProps)
       </div>
     </div>
   );
-}
+});
+
+AccomdationCard.displayName = 'AccomdationCard';
+
+export default AccomdationCard;

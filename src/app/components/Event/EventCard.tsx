@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import formatDate from '@/app/utils/formatDate';
@@ -16,7 +17,7 @@ interface EventCardProps {
   onClick: () => void;
 }
 
-export default function EventCard({ event, onClick }: EventCardProps) {
+const EventCard = React.memo(({ event, onClick }: EventCardProps) => {
   return (
     <div className="event-card relative w-full rounded-md bg-white p-5" onClick={onClick}>
       <div className="2xl:flex">
@@ -74,4 +75,8 @@ export default function EventCard({ event, onClick }: EventCardProps) {
       </div>
     </div>
   );
-}
+});
+
+EventCard.displayName = 'EventCard';
+
+export default EventCard;

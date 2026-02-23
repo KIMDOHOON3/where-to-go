@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +13,7 @@ interface MoreCardProps {
   onClick: () => void;
 }
 
-export default function MoreCard({ moreData, onClick }: MoreCardProps) {
+const MoreCard = React.memo(({ moreData, onClick }: MoreCardProps) => {
   const { heartStates, toggleHeart } = useLike();
   return (
     <>
@@ -75,4 +76,8 @@ export default function MoreCard({ moreData, onClick }: MoreCardProps) {
       </div>
     </>
   );
-}
+});
+
+MoreCard.displayName = 'MoreCard';
+
+export default MoreCard;
