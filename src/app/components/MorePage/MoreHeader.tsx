@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import Image from 'next/image';
 import { AreaHeaderSlide, categories } from '@/app/constant/SlideConstant';
 import { useUIStore } from '@/app/stores/useAreaUiStore';
@@ -9,14 +10,14 @@ export default function MoreHeader() {
   const { selectedArea, setSelectedArea, setActiveIndex } = useUIStore();
   const { category, setCategory } = useInteractionStore();
 
-  const handleCategoryClick = (newCategory: string) => {
+  const handleCategoryClick = useCallback((newCategory: string) => {
     setCategory(newCategory);
-  };
+  }, [setCategory]);
 
-  const handleSlideClick = (index: number) => {
+  const handleSlideClick = useCallback((index: number) => {
     setActiveIndex(index);
     setSelectedArea(AreaHeaderSlide[index].title);
-  };
+  }, [setActiveIndex, setSelectedArea]);
 
   // category에 따른 인덱스 계산
   const categoryIndex = categories.indexOf(category);

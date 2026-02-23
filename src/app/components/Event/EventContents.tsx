@@ -1,7 +1,7 @@
 'use client';
 
 import 'swiper/css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { useEventData } from '@/app/hooks/useEventData';
@@ -34,6 +34,20 @@ export default function EventContents() {
 
   const { data: eventData, isLoading, error } = useEventData(selectedArea, eventStartDate);
 
+  const handlePrevDay = useCallback(() => {
+    if (!currentDate) return;
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() - 1);
+    setCurrentDate(newDate);
+  }, [currentDate]);
+
+  const handleNextDay = useCallback(() => {
+    if (!currentDate) return;
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + 1);
+    setCurrentDate(newDate);
+  }, [currentDate]);
+
   useEffect(() => {
     if (currentDate && eventStartDate) {
       // queryKey 변경 시 자동 refetch되므로 수동 호출 불필요
@@ -54,12 +68,8 @@ export default function EventContents() {
         <EventCalendar
           currentDate={currentDate}
           onDateChange={setCurrentDate}
-          onPrevDay={() =>
-            setCurrentDate(new Date(new Date(currentDate).setDate(currentDate.getDate() - 1)))
-          }
-          onNextDay={() =>
-            setCurrentDate(new Date(new Date(currentDate).setDate(currentDate.getDate() + 1)))
-          }
+          onPrevDay={handlePrevDay}
+          onNextDay={handleNextDay}
         />
         {isLoading ? (
           <EventSkeleton />
