@@ -70,17 +70,17 @@ export default function SearchContainer() {
     );
   };
 
-  const handleCategoryChange = (id: string | null) => {
+  const handleCategoryChange = useCallback((id: string | null) => {
     setContentTypeId(id);
     setExpandedCategory(null);
-  };
+  }, []);
 
-  const handleExpandCategory = (id: string) => {
+  const handleExpandCategory = useCallback((id: string) => {
     setExpandedCategory(id);
     setContentTypeId(id);
-  };
+  }, []);
 
-  const highlightKeyword = (text: string, keyword: string): (string | JSX.Element)[] => {
+  const highlightKeyword = useCallback((text: string, keyword: string): (string | JSX.Element)[] => {
     if (!keyword.trim()) return [text];
     const parts = text.split(new RegExp(`(${keyword})`, 'gi'));
     return parts.map((part: string, index: number) =>
@@ -92,7 +92,7 @@ export default function SearchContainer() {
         part
       )
     );
-  };
+  }, [keyword]);
 
   if (!keyword) {
     return (
