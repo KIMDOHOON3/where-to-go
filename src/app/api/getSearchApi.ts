@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { SearchApiResponse } from '@/app/types/ItemType';
+import { handleAxiosError, logError } from '@/app/utils/errorHandler';
+import { ERROR_MESSAGES } from '@/app/constant/errorMessages';
 
 // 검색 정보 조회 (BFF 호출)
 export const getSearchApi = async (
@@ -22,7 +24,7 @@ export const getSearchApi = async (
 
 
   try {
-    const response = await axios.get('/api/search', { 
+    const response = await axios.get('/api/search', {
       params,
       timeout: 10000,
     });
@@ -41,15 +43,7 @@ export const getSearchApi = async (
       tel: item.tel ?? '',
     }));
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error('❌ [getSearchApi] Axios Error:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message,
-      });
-    } else {
-      console.error('❌ [getSearchApi] Error:', error);
-    }
-    throw new Error('검색 데이터를 불러오는 중 오류가 발생했습니다.');
+    logError('getSearchApi', error);
+    throw handleAxiosError(error, ERROR_MESSAGES.SEARCH);
   }
 };

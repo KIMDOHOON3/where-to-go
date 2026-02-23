@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { EventItem } from '@/app/types/ItemType';
 import { areaCodeMap } from '@/app/constant/SlideConstant';
+import { handleAxiosError, logError } from '@/app/utils/errorHandler';
+import { ERROR_MESSAGES } from '@/app/constant/errorMessages';
 
 interface EventApiOptions {
   numOfRows?: number;
@@ -56,7 +58,7 @@ export const getEventApi = async (
       cat3: item.cat3 ?? '',
     }));
   } catch (error) {
-    console.error('Event API Error:', error);
-    throw new Error('이벤트 데이터를 불러오는 중 오류가 발생했습니다.');
+    logError('getEventApi', error);
+    throw handleAxiosError(error, ERROR_MESSAGES.EVENT);
   }
 };

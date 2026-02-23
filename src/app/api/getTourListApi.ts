@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { AreaItem } from '@/app/types/ItemType';
 import { areaCodeMap, categoryMap } from '@/app/constant/SlideConstant';
+import { handleAxiosError, logError } from '@/app/utils/errorHandler';
+import { ERROR_MESSAGES } from '@/app/constant/errorMessages';
 
 export const getTourListApi = async (
   selectedArea: string,
@@ -39,15 +41,7 @@ export const getTourListApi = async (
       contentid: item.contentid ?? '',
     }));
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error('❌ [getTourListApi] Axios Error:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message,
-      });
-    } else {
-      console.error('❌ [getTourListApi] Error:', error);
-    }
-    throw new Error('관광지 데이터를 불러오는 중 오류가 발생했습니다.');
+    logError('getTourListApi', error);
+    throw handleAxiosError(error, ERROR_MESSAGES.TOUR_LIST);
   }
 };

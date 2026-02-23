@@ -2,6 +2,8 @@
 import axios from 'axios';
 import { AreaItem } from '@/app/types/ItemType';
 import getUserLocation from '@/app/utils/getUserLocation';
+import { handleAxiosError, logError } from '@/app/utils/errorHandler';
+import { ERROR_MESSAGES } from '@/app/constant/errorMessages';
 
 // 위치 기반 관광 정보 조회 (BFF 호출)
 export const getLocationApi = async (
@@ -45,7 +47,7 @@ export const getLocationApi = async (
       areaCode: formattedItems[0]?.areaCode || '',
     };
   } catch (error) {
-    console.error('Location API Error:', error);
-    throw new Error('데이터를 불러오는 중 오류가 발생했습니다.');
+    logError('getLocationApi', error);
+    throw handleAxiosError(error, ERROR_MESSAGES.LOCATION);
   }
 };
