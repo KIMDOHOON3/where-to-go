@@ -32,15 +32,15 @@ export default function EventContents() {
         .padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`
     : '';
 
-  const { data: eventData, isLoading, error, refetch } = useEventData(selectedArea, eventStartDate);
+  const { data: eventData, isLoading, error } = useEventData(selectedArea, eventStartDate);
 
   useEffect(() => {
     if (currentDate && eventStartDate) {
-      refetch();
+      // queryKey 변경 시 자동 refetch되므로 수동 호출 불필요
       setActiveIndex(0);
       swiperRef?.slideTo(0);
     }
-  }, [currentDate, selectedArea, refetch, swiperRef, eventStartDate]);
+  }, [currentDate, selectedArea, swiperRef, eventStartDate]);
 
   if (!currentDate) {
     return <div>Loading...</div>;
