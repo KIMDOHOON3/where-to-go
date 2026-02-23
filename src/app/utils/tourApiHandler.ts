@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { API_CONFIG } from '@/app/constant/apiConstants';
+import { logError } from '@/app/utils/errorHandler';
 
 interface ValidationRule {
   condition: (params: Record<string, string>) => boolean;
@@ -92,37 +93,62 @@ export async function handleTourApiRequest(
     return NextResponse.json(response.data);
     
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error('❌ [TourAPI] Axios Error:', {
-        endpoint: config.endpoint,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        message: error.message,
-        code: error.code,
-      });
+    logError(`TourAPI - ${config.endpoint}`, error);
 
-      // 상세 에러 응답
+    if (axios.isAxiosError(error)) {
+      const axiosError = error;
+
+      // 네트워크 에러 (응답 없음)
+      if (!axiosError.response) {
+        const isTimeout = axiosError.code === 'ECONNABORTED' || axiosError.message.includes('timeout');
+        return NextResponse.json(
+          {
+            message: isTimeout ? 'Request timeout' : 'Network error',
+            detail: isTimeout
+              ? '요청 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.'
+              : '인터넷 연결을 확인해주세요.',
+          },
+          { status: 503 }
+        );
+      }
+
+      // HTTP 상태 코드별 처리
+      const status = axiosError.response.status;
+      let message = 'API Error';
+      let detail = '데이터를 불러오는 중 오류가 발생했습니다.';
+
+      if (status === 429) {
+        message = 'Rate limit exceeded';
+        detail = 'API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.';
+      } else if (status >= 500) {
+        message = 'Server error';
+        detail = '서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.';
+      } else if (status === 404) {
+        message = 'Not found';
+        detail = '요청하신 데이터를 찾을 수 없습니다.';
+      } else if (status === 400) {
+        message = 'Bad request';
+        detail = '잘못된 요청입니다.';
+      }
+
       return NextResponse.json(
-        { 
-          message: 'Tour API Error',
-          detail: error.message,
-          status: error.response?.status,
-          apiError: error.response?.data
-        }, 
-        { status: 500 }
-      );
-    } else if (error instanceof Error) {
-      return NextResponse.json(
-        { 
-          message: 'Tour API Error',
-          detail: error.message
-        }, 
-        { status: 500 }
+        {
+          message,
+          detail,
+          status,
+        },
+        { status: status >= 500 ? status : 500 }
       );
     }
 
-    return NextResponse.json({ message: 'Unknown error occurred' }, { status: 500 });
+    // 일반 에러
+    return NextResponse.json(
+      {
+        message: 'Unknown error',
+        detail: '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+      },
+      { status: 500 }
+    );
   }
 }
 
