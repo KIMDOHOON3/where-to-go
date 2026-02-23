@@ -39,12 +39,12 @@ export const getLocationApi = async (
       firstimage2: item.firstimage2 ?? '',
       contenttypeid: item.contenttypeid ?? '',
       contentid: item.contentid ?? '',
-      areaCode: item.areacode ?? '',
+      areacode: item.areacode ?? '',
     }));
 
     return {
       items: formattedItems,
-      areaCode: formattedItems[0]?.areaCode || '',
+      areaCode: formattedItems[0]?.areacode || '',
     };
   } catch (error) {
     logError('getLocationApi', error);

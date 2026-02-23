@@ -33,7 +33,7 @@ export const getStayApi = async (selectedArea: string): Promise<StayItem[]> => {
       firstimage2: item.firstimage2 ?? '',
       contentid: item.contentid ?? '',
       contenttypeid: item.contenttypeid ?? '',
-      areaCode: item.areacode ?? '',
+      areacode: item.areacode ?? '',
     }));
   } catch (error) {
     logError('getStayApi', error);
