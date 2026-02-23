@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import throttle from 'lodash/throttle';
 import Navigation from '@/app/components/Header/Navigation';
@@ -13,7 +13,7 @@ import ScrollToTopButton from '@/app/components/Common/ScrollToTopButton';
 export default function Header() {
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
 
   const SCROLL_THRESHOLD = 50; // 스크롤 임계값 (픽셀 단위)
   const THROTTLE_DELAY = 200; // 스로틀링 딜레이 (밀리초 단위)
@@ -21,7 +21,7 @@ export default function Header() {
   // 클라이언트 사이드에서만 실행
   useEffect(() => {
     // 컴포넌트가 마운트 된 후에 초기 스크롤 값 설정
-    setLastScrollY(window.scrollY);
+    lastScrollYRef.current = window.scrollY;
   }, []);
 
   const controlHeader = useMemo(
@@ -31,22 +31,22 @@ export default function Header() {
 
         if (window.innerWidth < 1024) {
           // 모바일 환경
-          if (Math.abs(currentScrollY - lastScrollY) > SCROLL_THRESHOLD) {
-            if (currentScrollY > lastScrollY) {
+          if (Math.abs(currentScrollY - lastScrollYRef.current) > SCROLL_THRESHOLD) {
+            if (currentScrollY > lastScrollYRef.current) {
               // 아래로 스크롤
               setIsHeaderVisible(false);
             } else {
               // 위로 스크롤
               setIsHeaderVisible(true);
             }
-            setLastScrollY(currentScrollY);
+            lastScrollYRef.current = currentScrollY;
           }
         } else {
           // 데스크톱 환경
           setHeaderScrolled(currentScrollY > 10);
         }
       }, THROTTLE_DELAY),
-    [lastScrollY]
+    []
   );
 
   useEffect(() => {
