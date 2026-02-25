@@ -67,19 +67,12 @@ export async function handleTourApiRequest(
       params: apiParams,
       timeout: 10000,
     });
-    
+
     // 공공데이터 API 에러 체크
     const resultCode = response.data?.response?.header?.resultCode;
     const resultMsg = response.data?.response?.header?.resultMsg;
-    
 
     if (resultCode && resultCode !== '0000') {
-      console.error('❌ [TourAPI] API returned error:', {
-        code: resultCode,
-        message: resultMsg,
-        fullHeader: response.data?.response?.header
-      });
-      
       return NextResponse.json(
         {
           message: 'API Error',
@@ -91,7 +84,6 @@ export async function handleTourApiRequest(
     }
 
     return NextResponse.json(response.data);
-    
   } catch (error: unknown) {
     logError(`TourAPI - ${config.endpoint}`, error);
 
@@ -100,7 +92,8 @@ export async function handleTourApiRequest(
 
       // 네트워크 에러 (응답 없음)
       if (!axiosError.response) {
-        const isTimeout = axiosError.code === 'ECONNABORTED' || axiosError.message.includes('timeout');
+        const isTimeout =
+          axiosError.code === 'ECONNABORTED' || axiosError.message.includes('timeout');
         return NextResponse.json(
           {
             message: isTimeout ? 'Request timeout' : 'Network error',

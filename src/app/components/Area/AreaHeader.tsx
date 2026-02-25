@@ -23,8 +23,7 @@ export default function AreaHeader() {
         // 위치 정보 가져오고 버튼 상태를 토글하여 이동시키기
         setMyLocationButton(!myLocationButton); // 상태를 반전시켜서 왼쪽/오른쪽으로 번갈아 이동
       },
-      (error) => {
-        console.error('위치 정보 오류:', error);
+      () => {
         alert('위치 정보를 가져오는 중 문제가 발생했습니다.');
       }
     );

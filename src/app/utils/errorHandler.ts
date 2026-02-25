@@ -5,7 +5,7 @@ import { ERROR_MESSAGES } from '@/app/constant/errorMessages';
 /**
  * Axios 에러를 ApiError로 변환
  */
-export function handleAxiosError(error: unknown, contextMessage?: string): ApiError {
+export const handleAxiosError = (error: unknown, contextMessage?: string): ApiError => {
   // Axios 에러인 경우
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError;
@@ -89,13 +89,13 @@ export function handleAxiosError(error: unknown, contextMessage?: string): ApiEr
     undefined,
     error
   );
-}
+};
 
 /**
  * 개발 환경에서만 에러 로깅
  */
-export function logError(context: string, error: unknown): void {
+export const logError = (context: string, error: unknown): void => {
   if (process.env.NODE_ENV === 'development') {
     console.error(`❌ [${context}]`, error);
   }
-}
+};

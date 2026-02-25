@@ -32,8 +32,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       } else {
         document.documentElement.classList.remove('dark');
       }
-    } catch (error) {
-      console.error('테마 설정 중 오류 발생:', error);
+    } catch {
+      // 테마 설정 실패 시 기본 테마 사용
     }
   }, []);
 

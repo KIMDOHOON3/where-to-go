@@ -48,8 +48,6 @@ export const useMainSlideLogic = () => {
         }
       }
       setIsPlaying(!isPlaying);
-    } else {
-      console.error('play, pause 작동이 안됩니다.');
     }
   };
 
@@ -73,11 +71,11 @@ export const useMainSlideLogic = () => {
   }, [currentSlide]);
 
   useEffect(() => {
-    function handleResize() {
+    const handleResize = () => {
       if (typeof window !== 'undefined') {
         setShowNavigation(window.innerWidth >= 1024);
       }
-    }
+    };
 
     // 클라이언트 사이드에서만 실행
     if (typeof window !== 'undefined') {
