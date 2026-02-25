@@ -1,7 +1,7 @@
 'use client';
 
 import 'swiper/css';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { useEventData } from '@/app/hooks/useEventData';
@@ -16,7 +16,7 @@ import Modal from '@/app/components/Common/Modal';
 import { useModalLogic } from '@/app/hooks/useModalLogic';
 
 export default function EventContents() {
-  const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [selectedArea, setSelectedArea] = useState<string>('전국');
@@ -52,9 +52,9 @@ export default function EventContents() {
     if (currentDate && eventStartDate) {
       // queryKey 변경 시 자동 refetch되므로 수동 호출 불필요
       setActiveIndex(0);
-      swiperRef?.slideTo(0);
+      swiperRef.current?.slideTo(0);
     }
-  }, [currentDate, selectedArea, swiperRef, eventStartDate]);
+  }, [currentDate, selectedArea, eventStartDate]);
 
   if (!currentDate) {
     return <div>Loading...</div>;
@@ -88,7 +88,9 @@ export default function EventContents() {
                 },
               }}
               centeredSlides={true}
-              onSwiper={setSwiperRef}
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             >
               {eventData.map((event) => (
@@ -103,7 +105,7 @@ export default function EventContents() {
             <EventPagination
               eventData={eventData}
               activeIndex={activeIndex}
-              onPaginationClick={(pagination) => swiperRef?.slideTo(pagination)}
+              onPaginationClick={(pagination) => swiperRef.current?.slideTo(pagination)}
             />
           </>
         ) : (
