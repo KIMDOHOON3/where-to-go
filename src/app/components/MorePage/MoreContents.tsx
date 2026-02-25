@@ -1,17 +1,25 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { useInView } from 'react-intersection-observer';
 import MoreCard from '@/app/components/MorePage/MoreCard';
 import MoreSkeleton from '@/app/components/MorePage/MoreSkeleton';
 import DataError from '@/app/components/Common/Error';
 import { useUIStore } from '@/app/stores/useAreaUiStore';
 import useTourDataInfinites from '@/app/hooks/useTourDataInfinites';
-import Toast from '@/app/components/Common/Toast';
-import Modal from '@/app/components/Common/Modal';
 import { useModalLogic } from '@/app/hooks/useModalLogic';
 import debounce from 'lodash/debounce';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
+
+const Toast = dynamic(() => import('@/app/components/Common/Toast'), {
+  ssr: false,
+});
+
+const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 const MAX_ITEMS = 24;
 

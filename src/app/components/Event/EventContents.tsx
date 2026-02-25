@@ -2,6 +2,7 @@
 
 import 'swiper/css';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { useEventData } from '@/app/hooks/useEventData';
@@ -12,8 +13,12 @@ import EventPagination from '@/app/components/Event/EventPagination';
 import DataError from '@/app/components/Common/Error';
 import EmptyState from '@/app/components/Common/EmptyState';
 import EventSkeleton from '@/app/components/Event/EventSkeleton';
-import Modal from '@/app/components/Common/Modal';
 import { useModalLogic } from '@/app/hooks/useModalLogic';
+
+const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function EventContents() {
   const swiperRef = useRef<SwiperType | null>(null);

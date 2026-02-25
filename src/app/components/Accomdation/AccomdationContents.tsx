@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useStayData } from '@/app/hooks/useStayData';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
@@ -10,9 +11,13 @@ import EmptyState from '@/app/components/Common/EmptyState';
 import AccomdationHeader from '@/app/components/Accomdation/AccomdationHeader';
 import AccomdationList from '@/app/components/Accomdation/AccomdationList';
 import AccomdationSkeleton from '@/app/components/Accomdation/AccomdationSkeleton';
-import Modal from '@/app/components/Common/Modal';
 import { useModalLogic } from '@/app/hooks/useModalLogic';
 import { useUIStore } from '@/app/stores/useAreaUiStore';
+
+const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function AccomdationContents() {
   const { setCurrentPage } = useInteractionStore();

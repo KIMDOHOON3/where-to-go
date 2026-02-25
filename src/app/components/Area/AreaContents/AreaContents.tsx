@@ -1,11 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Grid } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/grid';
 import Spinner from '@/app/components/Common/Spinner';
-import Toast from '@/app/components/Common/Toast';
 import CategorySelector from '@/app/components/Area/AreaContents/CategorySelector';
 import ProgressBar from '@/app/components/Common/ProgressBar';
 import MoreButton from '@/app/components/Common/MoreButton';
@@ -13,9 +13,17 @@ import DataError from '@/app/components/Common/Error';
 import EmptyState from '@/app/components/Common/EmptyState';
 import AreaSlideProps from '@/app/components/Area/AreaContents/AreaSlideProps';
 import { useAreaContentsLogic } from '@/app/hooks/useAreaContentsLogic';
-import Modal from '@/app/components/Common/Modal';
 import { useModalLogic } from '@/app/hooks/useModalLogic';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
+
+const Toast = dynamic(() => import('@/app/components/Common/Toast'), {
+  ssr: false,
+});
+
+const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function AreaContents() {
   const {

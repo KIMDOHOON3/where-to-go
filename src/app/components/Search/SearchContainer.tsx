@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { useSearchData } from '@/app/hooks/useSearchData';
 import { SearchApiResponse } from '@/app/types/ItemType';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
@@ -8,8 +9,12 @@ import DataError from '@/app/components/Common/Error';
 import SearchSection from '@/app/components/Search/SearchSection';
 import SearchContainerSkeleton from '@/app/components/Search/SearchContainerSkeleton';
 import SearchSectionSkeleton from '@/app/components/Search/SearchSectionSkeleton';
-import Modal from '@/app/components/Common/Modal';
 import { useModalLogic } from '@/app/hooks/useModalLogic';
+
+const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 const contentTypeNames: { [key: string]: string } = {
   '12': '🏛️ 관광지',
