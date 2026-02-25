@@ -86,6 +86,7 @@ export const useMainSlideLogic = () => {
 
       return () => window.removeEventListener('resize', handleResize);
     }
+    return undefined;
   }, []);
 
   return {

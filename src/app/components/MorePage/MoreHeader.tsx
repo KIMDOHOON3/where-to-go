@@ -15,8 +15,10 @@ export default function MoreHeader() {
   }, [setCategory]);
 
   const handleSlideClick = useCallback((index: number) => {
+    const slide = AreaHeaderSlide[index];
+    if (!slide) return;
     setActiveIndex(index);
-    setSelectedArea(AreaHeaderSlide[index].title);
+    setSelectedArea(slide.title);
   }, [setActiveIndex, setSelectedArea]);
 
   // category에 따른 인덱스 계산

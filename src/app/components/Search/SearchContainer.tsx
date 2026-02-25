@@ -183,7 +183,8 @@ export default function SearchContainer() {
             })
           ) : (
             contentTypeNames[contentTypeId] &&
-            groupedData[contentTypeId]?.length > 0 && (
+            groupedData[contentTypeId] &&
+            groupedData[contentTypeId].length > 0 && (
               <SearchSection
                 contentTypeId={contentTypeId}
                 name={contentTypeNames[contentTypeId]}

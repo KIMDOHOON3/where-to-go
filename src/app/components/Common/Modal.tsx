@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import IconAlert from '@/app/components/Common/IconAlert';
 import IconClose from '@/app/components/Common/IconClose';
 import useClose from '@/app/hooks/useClose';

@@ -27,8 +27,9 @@ export default function AreaSlide() {
 
   // 슬라이드 클릭 시, 해당 슬라이드를 선택하고 활성화된 슬라이드 인덱스를 변경
   const handleSlideClick = (index: number) => {
-    const selected = AreaHeaderSlide[index].title;
-    setSelectedArea(selected);
+    const slide = AreaHeaderSlide[index];
+    if (!slide) return;
+    setSelectedArea(slide.title);
     setActiveIndex(index);
 
     if (swiperRef.current) {

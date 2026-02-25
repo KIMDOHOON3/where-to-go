@@ -50,6 +50,7 @@ export default function SearchSection({
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }
+    return undefined;
   }, []);
 
   useEffect(() => {

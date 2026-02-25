@@ -1,4 +1,3 @@
-import React from 'react';
 import Skeleton from '@/app/components/Common/Skeleton';
 
 export default function EventSkeleton() {
