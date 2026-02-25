@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Grid } from 'swiper/modules';
-import 'swiper/css';
 import 'swiper/css/grid';
 import Spinner from '@/app/components/Common/Spinner';
 import CategorySelector from '@/app/components/Area/AreaContents/CategorySelector';

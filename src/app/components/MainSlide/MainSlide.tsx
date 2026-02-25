@@ -1,6 +1,5 @@
 'use client';
 
-import 'swiper/css';
 import { useMainSlideLogic } from '@/app/hooks/useMainSlideLogic';
 import MainImageSlider from '@/app/components/MainSlide/MainImageSlider';
 import MainTextSlider from '@/app/components/MainSlide/MainTextSlider';

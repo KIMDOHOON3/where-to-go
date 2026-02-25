@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '@/app/styles/globals.css';
+import 'swiper/css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import Header from '@/app/components/Header/Header';

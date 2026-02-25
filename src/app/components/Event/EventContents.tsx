@@ -1,6 +1,5 @@
 'use client';
 
-import 'swiper/css';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
