@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSearchData } from '@/app/hooks/useSearchData';
 import { SearchApiResponse } from '@/app/types/ItemType';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
@@ -54,7 +54,9 @@ export default function SearchContainer() {
     };
   }, [keyword, contentTypeId, debouncedSearch]);
 
-  const groupDataByContentType = (data: SearchApiResponse[]) => {
+  const groupedData = useMemo(() => {
+    if (!data) return {};
+
     return data.reduce(
       (acc, item) => {
         const contentType = item.contenttypeid;
@@ -68,7 +70,7 @@ export default function SearchContainer() {
       },
       {} as { [key: string]: SearchApiResponse[] }
     );
-  };
+  }, [data]);
 
   const handleCategoryChange = useCallback((id: string | null) => {
     setContentTypeId(id);
@@ -121,7 +123,6 @@ export default function SearchContainer() {
     );
   }
 
-  const groupedData = data ? groupDataByContentType(data) : {};
   const hasAnyResults = Object.values(groupedData).some((group) => group.length > 0);
 
   return (

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { SearchApiResponse } from '@/app/types/ItemType';
 import { filterAddress, filterTitle } from '@/app/utils/filterDate';
 import SearchPagination from '@/app/components/Search/SearchPagination';
@@ -58,10 +58,16 @@ export default function SearchSection({
     }
   }, [isExpanded]);
 
-  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
-  const startIndex = isExpanded ? (currentPage - 1) * ITEMS_PER_PAGE : 0;
-  const endIndex = isExpanded ? startIndex + ITEMS_PER_PAGE : initialItems;
-  const currentItems = items.slice(startIndex, endIndex);
+  const totalPages = useMemo(
+    () => Math.ceil(items.length / ITEMS_PER_PAGE),
+    [items.length]
+  );
+
+  const currentItems = useMemo(() => {
+    const startIndex = isExpanded ? (currentPage - 1) * ITEMS_PER_PAGE : 0;
+    const endIndex = isExpanded ? startIndex + ITEMS_PER_PAGE : initialItems;
+    return items.slice(startIndex, endIndex);
+  }, [items, isExpanded, currentPage, initialItems]);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
