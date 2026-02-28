@@ -33,10 +33,32 @@ export default function DetailContainer({
   }
 
   if (error || !data?.common) {
+    console.error('DetailContainer 에러:', { error, data, contentId, contentTypeId });
+
     return (
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="rounded-lg bg-red-50 p-8 text-center">
-          <p className="text-xl text-red-600">정보를 불러올 수 없습니다</p>
+          <p className="mb-2 text-xl text-red-600">정보를 불러올 수 없습니다</p>
+          <p className="mb-4 text-sm text-red-500">
+            {error?.message || 'API 응답에 데이터가 없습니다'}
+          </p>
+          <details className="mb-4 text-left">
+            <summary className="cursor-pointer text-sm text-gray-600">
+              디버그 정보 (개발자 모드)
+            </summary>
+            <pre className="mt-2 overflow-auto rounded bg-gray-100 p-4 text-xs">
+              {JSON.stringify(
+                {
+                  contentId,
+                  contentTypeId,
+                  error: error?.message,
+                  data: data,
+                },
+                null,
+                2
+              )}
+            </pre>
+          </details>
           <button
             onClick={() => router.back()}
             className="mt-4 rounded-lg bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700"

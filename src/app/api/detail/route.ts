@@ -17,6 +17,8 @@ export const GET = async (req: NextRequest) => {
   }
 
   try {
+    console.log('상세 정보 요청:', { contentId, contentTypeId });
+
     // detailCommon: 공통 상세 정보 (제목, 주소, 이미지, 전화번호 등)
     const commonResponse = await axios.get(
       'https://apis.data.go.kr/B551011/KorService1/detailCommon1',
@@ -37,6 +39,8 @@ export const GET = async (req: NextRequest) => {
         },
       }
     );
+
+    console.log('API 응답 상태:', commonResponse.data?.response?.header);
 
     let introResponse = null;
 
@@ -67,6 +71,15 @@ export const GET = async (req: NextRequest) => {
     });
   } catch (error) {
     console.error('상세 정보 조회 실패:', error);
-    return NextResponse.json({ error: '상세 정보를 가져올 수 없습니다' }, { status: 500 });
+    if (axios.isAxiosError(error)) {
+      console.error('API 에러 응답:', error.response?.data);
+    }
+    return NextResponse.json(
+      {
+        error: '상세 정보를 가져올 수 없습니다',
+        details: axios.isAxiosError(error) ? error.response?.data : String(error),
+      },
+      { status: 500 }
+    );
   }
 };
