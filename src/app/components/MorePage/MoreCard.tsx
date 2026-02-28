@@ -37,7 +37,9 @@ const MoreCard = React.memo(({ moreData }: MoreCardProps) => {
               key={more.contentid}
               className="flex w-full cursor-pointer flex-col"
               onClick={() =>
-                router.push(`/detail/${more.contentid}?contentTypeId=${more.contenttypeid}`)
+                router.push(
+                  `/detail/${more.contentid}?contentTypeId=${more.contenttypeid}&title=${encodeURIComponent(more.title)}&image=${encodeURIComponent(more.firstimage || '')}`
+                )
               }
             >
               <div className="relative mb-2 aspect-[4/3] h-[34.38vw] w-full lg:h-[13.75rem]">
@@ -56,7 +58,7 @@ const MoreCard = React.memo(({ moreData }: MoreCardProps) => {
                 {/* 하트 버튼 */}
                 <button
                   onClick={handleFavoriteClick}
-                  className="absolute right-2 top-2 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
+                  className="bg-white/80 absolute right-2 top-2 rounded-full p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
                   aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
                 >
                   <svg

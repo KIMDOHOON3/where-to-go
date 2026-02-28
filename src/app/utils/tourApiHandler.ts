@@ -152,3 +152,4 @@ export const commonValidations = {
     message: 'lDongRegnCd is required when lDongSignguCd is provided',
   },
 };
+

@@ -44,7 +44,9 @@ const AreaSlideProps = React.memo(({ item }: ItemTypes) => {
       <div
         className="relative aspect-[4/3] h-[34.38vw] w-full cursor-pointer overflow-hidden rounded-md lg:aspect-square lg:h-full"
         onClick={() =>
-          router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`)
+          router.push(
+            `/detail/${item.contentid}?contentTypeId=${item.contenttypeid}&title=${encodeURIComponent(item.title)}&image=${encodeURIComponent(item.firstimage || '')}`
+          )
         }
       >
         <Image
@@ -60,7 +62,7 @@ const AreaSlideProps = React.memo(({ item }: ItemTypes) => {
         {/* 하트 버튼 */}
         <button
           onClick={handleFavoriteClick}
-          className="absolute right-2 top-2 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
+          className="bg-white/80 absolute right-2 top-2 rounded-full p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
           aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
         >
           <svg

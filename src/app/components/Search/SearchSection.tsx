@@ -63,10 +63,7 @@ export default function SearchSection({
     }
   }, [isExpanded]);
 
-  const totalPages = useMemo(
-    () => Math.ceil(items.length / ITEMS_PER_PAGE),
-    [items.length]
-  );
+  const totalPages = useMemo(() => Math.ceil(items.length / ITEMS_PER_PAGE), [items.length]);
 
   const currentItems = useMemo(() => {
     const startIndex = isExpanded ? (currentPage - 1) * ITEMS_PER_PAGE : 0;
@@ -103,7 +100,9 @@ export default function SearchSection({
               key={item.contentid}
               className="cursor-pointer border-b border-bordercolor"
               onClick={() =>
-                router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`)
+                router.push(
+                  `/detail/${item.contentid}?contentTypeId=${item.contenttypeid}&title=${encodeURIComponent(item.title)}&image=${encodeURIComponent(item.firstimage || '')}`
+                )
               }
             >
               <div className="flex gap-4">
@@ -121,7 +120,7 @@ export default function SearchSection({
                   {/* 하트 버튼 */}
                   <button
                     onClick={handleFavoriteClick}
-                    className="absolute right-1 top-1 rounded-full bg-white/80 p-1 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white lg:p-1.5"
+                    className="bg-white/80 absolute right-1 top-1 rounded-full p-1 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white lg:p-1.5"
                     aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
                   >
                     <svg
@@ -145,7 +144,10 @@ export default function SearchSection({
                       {' '}
                       {highlightKeyword(filterTitle(item.title), keyword)}
                     </h3>
-                    <p className="text-sm"> {highlightKeyword(filterAddress(item.addr1), keyword)}</p>
+                    <p className="text-sm">
+                      {' '}
+                      {highlightKeyword(filterAddress(item.addr1), keyword)}
+                    </p>
                   </div>
                   <div>
                     <Link

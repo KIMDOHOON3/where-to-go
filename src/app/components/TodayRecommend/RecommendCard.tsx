@@ -24,7 +24,9 @@ const RecommendCard = ({ item }: RecommendCardProps) => {
   };
 
   const handleCardClick = () => {
-    router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`);
+    router.push(
+      `/detail/${item.contentid}?contentTypeId=${item.contenttypeid}&title=${encodeURIComponent(item.title)}&image=${encodeURIComponent(item.firstimage || '')}`
+    );
   };
 
   return (
@@ -43,7 +45,7 @@ const RecommendCard = ({ item }: RecommendCardProps) => {
         {/* 하트 버튼 */}
         <button
           onClick={handleFavoriteClick}
-          className="absolute right-2 top-2 rounded-full bg-white/80 p-2 shadow-md transition-all hover:scale-110 hover:bg-white"
+          className="bg-white/80 absolute right-2 top-2 rounded-full p-2 shadow-md transition-all hover:scale-110 hover:bg-white"
           aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
         >
           <svg
@@ -63,7 +65,7 @@ const RecommendCard = ({ item }: RecommendCardProps) => {
       </div>
       <div className="mt-2 px-1">
         <h3 className="truncate text-sm font-semibold md:text-base">{item.title}</h3>
-        <p className="truncate text-xs text-gray-600 md:text-sm">{item.addr1}</p>
+        <p className="text-gray-600 truncate text-xs md:text-sm">{item.addr1}</p>
       </div>
     </div>
   );

@@ -10,10 +10,7 @@ interface AccomdationListProps {
   onSlideChange: (index: number) => void;
 }
 
-export default function AccomdationList({
-  stays,
-  onSlideChange,
-}: AccomdationListProps) {
+export default function AccomdationList({ stays, onSlideChange }: AccomdationListProps) {
   const router = useRouter();
   return (
     <Swiper
@@ -30,7 +27,9 @@ export default function AccomdationList({
           <AccomdationCard
             stay={stay}
             onClick={() =>
-              router.push(`/detail/${stay.contentid}?contentTypeId=${stay.contenttypeid}`)
+              router.push(
+                `/detail/${stay.contentid}?contentTypeId=${stay.contenttypeid}&title=${encodeURIComponent(stay.title)}&image=${encodeURIComponent(stay.firstimage || '')}`
+              )
             }
           />
         </SwiperSlide>

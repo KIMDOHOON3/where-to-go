@@ -99,7 +99,9 @@ export default function EventContents() {
                   <EventCard
                     event={event}
                     onClick={() =>
-                      router.push(`/detail/${event.contentid}?contentTypeId=${event.contenttypeid}`)
+                      router.push(
+                        `/detail/${event.contentid}?contentTypeId=${event.contenttypeid}&title=${encodeURIComponent(event.title)}&image=${encodeURIComponent(event.firstimage || '')}`
+                      )
                     }
                   />
                 </SwiperSlide>

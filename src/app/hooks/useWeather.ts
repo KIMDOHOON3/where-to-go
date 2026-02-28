@@ -50,12 +50,17 @@ export const useWeather = (_lat: number = 37.5665, _lon: number = 126.978) => {
           },
         });
 
-        const items = response.data?.response?.body?.items?.item || [];
+        const itemsRaw = response.data?.response?.body?.items?.item || [];
+        interface KMAItem {
+          category: string;
+          fcstValue: string;
+        }
+        const items: KMAItem[] = Array.isArray(itemsRaw) ? itemsRaw : [itemsRaw];
 
         // SKY(하늘상태), PTY(강수형태), TMP(기온) 추출
-        const sky = items.find((item: any) => item.category === 'SKY')?.fcstValue || '1';
-        const pty = items.find((item: any) => item.category === 'PTY')?.fcstValue || '0';
-        const tmp = items.find((item: any) => item.category === 'TMP')?.fcstValue || '20';
+        const sky = items.find((item) => item.category === 'SKY')?.fcstValue || '1';
+        const pty = items.find((item) => item.category === 'PTY')?.fcstValue || '0';
+        const tmp = items.find((item) => item.category === 'TMP')?.fcstValue || '20';
 
         return { sky, pty, tmp };
       } catch (error) {

@@ -15,8 +15,8 @@ export default function FavoritesContainer() {
       <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
         <div className="text-center">
           <div className="mb-4 text-6xl">💔</div>
-          <h2 className="mb-2 text-2xl font-bold text-gray-800">찜한 여행지가 없습니다</h2>
-          <p className="mb-6 text-gray-600">마음에 드는 여행지를 찜해보세요!</p>
+          <h2 className="text-gray-800 mb-2 text-2xl font-bold">찜한 여행지가 없습니다</h2>
+          <p className="text-gray-600 mb-6">마음에 드는 여행지를 찜해보세요!</p>
           <Link
             href="/"
             className="rounded-lg bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
@@ -32,13 +32,13 @@ export default function FavoritesContainer() {
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">찜한 여행지</h1>
-          <p className="mt-1 text-gray-600">총 {favorites.length}개</p>
+          <h1 className="text-gray-900 text-3xl font-bold">찜한 여행지</h1>
+          <p className="text-gray-600 mt-1">총 {favorites.length}개</p>
         </div>
         {favorites.length > 0 && (
           <button
             onClick={clearFavorites}
-            className="rounded-lg border border-red-300 px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
+            className="border-red-300 text-red-600 hover:bg-red-50 rounded-lg border px-4 py-2 text-sm transition-colors"
           >
             전체 삭제
           </button>
@@ -50,7 +50,9 @@ export default function FavoritesContainer() {
           <div
             key={item.contentid}
             onClick={() =>
-              router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`)
+              router.push(
+                `/detail/${item.contentid}?contentTypeId=${item.contenttypeid}&title=${encodeURIComponent(item.title)}&image=${encodeURIComponent(item.firstimage || '')}`
+              )
             }
             className="group relative cursor-pointer overflow-hidden rounded-lg shadow-md"
           >
@@ -68,7 +70,7 @@ export default function FavoritesContainer() {
                   e.stopPropagation();
                   removeFavorite(item.contentid);
                 }}
-                className="absolute right-2 top-2 rounded-full bg-white/90 p-2 shadow-md transition-all hover:bg-white"
+                className="bg-white/90 absolute right-2 top-2 rounded-full p-2 shadow-md transition-all hover:bg-white"
                 aria-label="찜 해제"
               >
                 <svg
@@ -87,12 +89,12 @@ export default function FavoritesContainer() {
               </button>
             </div>
             <div className="bg-white p-3">
-              <h3 className="mb-1 truncate font-semibold text-gray-900">{item.title}</h3>
-              <p className="mb-3 truncate text-sm text-gray-600">{item.addr1}</p>
+              <h3 className="text-gray-900 mb-1 truncate font-semibold">{item.title}</h3>
+              <p className="text-gray-600 mb-3 truncate text-sm">{item.addr1}</p>
               <Link
                 href={createKakaoMapURL(item.addr1 || '주소를 준비중입니다.')}
                 target="_blank"
-                className="block rounded-lg border border-gray-300 py-2 text-center text-sm transition-colors hover:bg-gray-50"
+                className="border-gray-300 hover:bg-gray-50 block rounded-lg border py-2 text-center text-sm transition-colors"
                 onClick={(e) => e.stopPropagation()}
               >
                 길찾기

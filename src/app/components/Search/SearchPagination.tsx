@@ -10,7 +10,7 @@ export default function SearchPagination({
   onPageChange,
 }: SearchPaginationProps) {
   const getPageNumbers = () => {
-    const pageNumbers = [];
+    const pageNumbers: number[] = [];
     let startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, startPage + 5);
 
