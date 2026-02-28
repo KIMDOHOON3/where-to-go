@@ -6,6 +6,7 @@ import { StayItem } from '@/app/types/ItemType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
 import { filterAddress, filterTitle } from '@/app/utils/filterDate';
+import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
 
 interface AccomdationCardProps {
   stay: StayItem;
@@ -13,6 +14,18 @@ interface AccomdationCardProps {
 }
 
 const AccomdationCard = React.memo(({ stay, onClick }: AccomdationCardProps) => {
+  const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
+  const isItemFavorite = isFavorite(stay.contentid);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isItemFavorite) {
+      removeFavorite(stay.contentid);
+    } else {
+      addFavorite(stay);
+    }
+  };
+
   return (
     <div className="rounded-lg bg-white shadow-md" onClick={onClick}>
       <div className="relative aspect-[4/3]">
@@ -27,6 +40,26 @@ const AccomdationCard = React.memo(({ stay, onClick }: AccomdationCardProps) => 
           }}
           loading="lazy"
         />
+        {/* 하트 버튼 */}
+        <button
+          onClick={handleFavoriteClick}
+          className="absolute right-2 top-2 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
+          aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
+        >
+          <svg
+            className="h-5 w-5"
+            fill={isItemFavorite ? '#ef4444' : 'none'}
+            stroke={isItemFavorite ? '#ef4444' : '#374151'}
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </button>
       </div>
       <div className="p-4">
         <h2 className="text-primary mb-2 text-lg font-bold">{filterTitle(stay.title)}</h2>

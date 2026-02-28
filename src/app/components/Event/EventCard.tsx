@@ -4,6 +4,7 @@ import Link from 'next/link';
 import formatDate from '@/app/utils/formatDate';
 import { filterAddress, filterTitle } from '@/app/utils/filterDate';
 import createKakaoMapURL from '@/app/utils/createKakaoMapURL';
+import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
 
 interface EventCardProps {
   event: {
@@ -18,6 +19,18 @@ interface EventCardProps {
 }
 
 const EventCard = React.memo(({ event, onClick }: EventCardProps) => {
+  const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
+  const isItemFavorite = isFavorite(event.contentid);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isItemFavorite) {
+      removeFavorite(event.contentid);
+    } else {
+      addFavorite(event);
+    }
+  };
+
   return (
     <div className="event-card relative w-full rounded-md bg-white p-5" onClick={onClick}>
       <div className="2xl:flex">
@@ -34,6 +47,26 @@ const EventCard = React.memo(({ event, onClick }: EventCardProps) => {
             }}
             loading="lazy"
           />
+          {/* 하트 버튼 */}
+          <button
+            onClick={handleFavoriteClick}
+            className="absolute right-2 top-2 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
+            aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
+          >
+            <svg
+              className="h-5 w-5"
+              fill={isItemFavorite ? '#ef4444' : 'none'}
+              stroke={isItemFavorite ? '#ef4444' : '#374151'}
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
         </div>
         <div className="border-dashed text-center 2xl:ml-8 2xl:flex 2xl:flex-col 2xl:justify-between 2xl:border-l 2xl:pb-0 2xl:pl-8 2xl:text-left">
           <div className="my-3">

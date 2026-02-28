@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SearchApiResponse } from '@/app/types/ItemType';
+import { SearchApiResponse, StayItem, EventItem, AreaItem } from '@/app/types/ItemType';
+
+type FavoriteItem = SearchApiResponse | StayItem | EventItem | AreaItem;
 
 interface FavoriteState {
-  favorites: SearchApiResponse[];
-  addFavorite: (item: SearchApiResponse) => void;
+  favorites: FavoriteItem[];
+  addFavorite: (item: FavoriteItem) => void;
   removeFavorite: (contentid: string) => void;
   isFavorite: (contentid: string) => boolean;
   clearFavorites: () => void;
