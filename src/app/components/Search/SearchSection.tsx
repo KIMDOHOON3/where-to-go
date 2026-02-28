@@ -7,6 +7,7 @@ import SearchPagination from '@/app/components/Search/SearchPagination';
 import createKakaoMapURL from '@/app/utils/createKakaoMapURL';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
+import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
 
 interface SearchSectionProps {
   contentTypeId: string;
@@ -29,6 +30,7 @@ export default function SearchSection({
   keyword,
   highlightKeyword,
 }: SearchSectionProps) {
+  const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [initialItems, setInitialItems] = useState(5);
   const ITEMS_PER_PAGE = 10;
@@ -82,53 +84,86 @@ export default function SearchSection({
     <div className="mx-4 mb-4 rounded-2xl bg-white p-4 shadow-md lg:mb-8">
       <h2 className="mb-2 text-base font-semibold">{name}</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {currentItems.map((item: SearchApiResponse) => (
-          <div
-            key={item.contentid}
-            className="cursor-pointer border-b border-bordercolor"
-            onClick={onClick}
-          >
-            <div className="flex gap-4">
-              <div className="relative mb-2 h-16 w-24 lg:h-32 lg:w-44">
-                <Image
-                  className="h-full w-full object-cover"
-                  src={item.firstimage || '/error/no-image.png'}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  style={{
-                    objectFit: 'cover',
-                  }}
-                />
-              </div>
-              <div className="flex w-full justify-between">
-                <div>
-                  <h3 className="text-base font-semibold">
-                    {' '}
-                    {highlightKeyword(filterTitle(item.title), keyword)}
-                  </h3>
-                  <p className="text-sm"> {highlightKeyword(filterAddress(item.addr1), keyword)}</p>
-                </div>
-                <div>
-                  <Link
-                    className="hover-button relative inline-block h-[1.875rem] w-[1.875rem] rounded-full border border-bordercolor text-sm lg:text-base"
-                    href={createKakaoMapURL(item.addr1)}
-                    target="_blank"
-                    onClick={(e) => {
-                      e.stopPropagation();
+        {currentItems.map((item: SearchApiResponse) => {
+          const isItemFavorite = isFavorite(item.contentid);
+
+          const handleFavoriteClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            if (isItemFavorite) {
+              removeFavorite(item.contentid);
+            } else {
+              addFavorite(item);
+            }
+          };
+
+          return (
+            <div
+              key={item.contentid}
+              className="cursor-pointer border-b border-bordercolor"
+              onClick={onClick}
+            >
+              <div className="flex gap-4">
+                <div className="relative mb-2 h-16 w-24 lg:h-32 lg:w-44">
+                  <Image
+                    className="h-full w-full object-cover"
+                    src={item.firstimage || '/error/no-image.png'}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{
+                      objectFit: 'cover',
                     }}
-                    aria-label={`${filterTitle(item.title)} 위치 카카오맵에서 보기`}
+                  />
+                  {/* 하트 버튼 */}
+                  <button
+                    onClick={handleFavoriteClick}
+                    className="absolute right-1 top-1 rounded-full bg-white/80 p-1 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white lg:p-1.5"
+                    aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
                   >
-                    <FontAwesomeIcon
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                      icon={faMapLocationDot}
-                    />
-                  </Link>
+                    <svg
+                      className="h-3 w-3 lg:h-4 lg:w-4"
+                      fill={isItemFavorite ? '#ef4444' : 'none'}
+                      stroke={isItemFavorite ? '#ef4444' : '#374151'}
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex w-full justify-between">
+                  <div>
+                    <h3 className="text-base font-semibold">
+                      {' '}
+                      {highlightKeyword(filterTitle(item.title), keyword)}
+                    </h3>
+                    <p className="text-sm"> {highlightKeyword(filterAddress(item.addr1), keyword)}</p>
+                  </div>
+                  <div>
+                    <Link
+                      className="hover-button relative inline-block h-[1.875rem] w-[1.875rem] rounded-full border border-bordercolor text-sm lg:text-base"
+                      href={createKakaoMapURL(item.addr1)}
+                      target="_blank"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      aria-label={`${filterTitle(item.title)} 위치 카카오맵에서 보기`}
+                    >
+                      <FontAwesomeIcon
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                        icon={faMapLocationDot}
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       {!isExpanded && items.length > initialItems && (
         <button
