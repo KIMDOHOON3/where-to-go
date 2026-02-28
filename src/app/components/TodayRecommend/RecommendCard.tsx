@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { SearchApiResponse } from '@/app/types/ItemType';
 import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
@@ -9,6 +10,7 @@ interface RecommendCardProps {
 }
 
 const RecommendCard = ({ item }: RecommendCardProps) => {
+  const router = useRouter();
   const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
   const isItemFavorite = isFavorite(item.contentid);
 
@@ -21,8 +23,15 @@ const RecommendCard = ({ item }: RecommendCardProps) => {
     }
   };
 
+  const handleCardClick = () => {
+    router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`);
+  };
+
   return (
-    <div className="group relative flex-shrink-0 cursor-pointer transition-transform hover:scale-105">
+    <div
+      onClick={handleCardClick}
+      className="group relative flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
+    >
       <div className="relative h-40 w-48 overflow-hidden rounded-lg md:h-48 md:w-56">
         <Image
           src={item.firstimage || '/error/no-image.png'}

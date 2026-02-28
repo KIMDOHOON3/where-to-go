@@ -8,17 +8,11 @@ import MoreSkeleton from '@/app/components/MorePage/MoreSkeleton';
 import DataError from '@/app/components/Common/Error';
 import { useUIStore } from '@/app/stores/useAreaUiStore';
 import useTourDataInfinites from '@/app/hooks/useTourDataInfinites';
-import { useModalLogic } from '@/app/hooks/useModalLogic';
 import debounce from 'lodash/debounce';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
 
 const Toast = dynamic(() => import('@/app/components/Common/Toast'), {
   ssr: false,
-});
-
-const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
-  ssr: false,
-  loading: () => null,
 });
 
 const MAX_ITEMS = 24;
@@ -36,7 +30,6 @@ export default function MoreContents() {
     isLoading,
     error,
   } = useTourDataInfinites(selectedArea, numOfRows, category);
-  const { isModalOpen, openModal, closeModal } = useModalLogic();
   const { ref, inView } = useInView({
     threshold: 0.5, // 요소가 50% 뷰포트에 들어왔을 때만 트리거
   });
@@ -81,12 +74,11 @@ export default function MoreContents() {
   return (
     <>
       <Toast />
-      <MoreCard moreData={tourList} onClick={openModal} />
+      <MoreCard moreData={tourList} />
       {tourList.length < MAX_ITEMS && (
         <div ref={ref} style={{ height: 20, background: 'transparent' }} />
       )}
       {isFetchingNextPage && <MoreSkeleton />}
-      {isModalOpen && <Modal onClose={closeModal} />}
       {tourList.length >= MAX_ITEMS && (
         <div className="py-4 text-center">최대 24개의 항목만 표시됩니다.</div>
       )}

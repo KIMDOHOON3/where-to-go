@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -15,7 +18,6 @@ interface SearchSectionProps {
   items: SearchApiResponse[];
   isExpanded: boolean;
   onExpand: (contentTypeId: string) => void;
-  onClick: () => void;
   keyword: string;
   highlightKeyword: (text: string, keyword: string) => React.ReactNode;
 }
@@ -26,10 +28,10 @@ export default function SearchSection({
   items,
   isExpanded,
   onExpand,
-  onClick,
   keyword,
   highlightKeyword,
 }: SearchSectionProps) {
+  const router = useRouter();
   const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [initialItems, setInitialItems] = useState(5);
@@ -100,7 +102,9 @@ export default function SearchSection({
             <div
               key={item.contentid}
               className="cursor-pointer border-b border-bordercolor"
-              onClick={onClick}
+              onClick={() =>
+                router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`)
+              }
             >
               <div className="flex gap-4">
                 <div className="relative mb-2 h-16 w-24 lg:h-32 lg:w-44">

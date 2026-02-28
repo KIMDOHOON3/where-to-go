@@ -1,11 +1,13 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
 import createKakaoMapURL from '@/app/utils/createKakaoMapURL';
 
 export default function FavoritesContainer() {
+  const router = useRouter();
   const { favorites, removeFavorite, clearFavorites } = useFavoriteStore();
 
   if (favorites.length === 0) {
@@ -45,7 +47,13 @@ export default function FavoritesContainer() {
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {favorites.map((item) => (
-          <div key={item.contentid} className="group relative overflow-hidden rounded-lg shadow-md">
+          <div
+            key={item.contentid}
+            onClick={() =>
+              router.push(`/detail/${item.contentid}?contentTypeId=${item.contenttypeid}`)
+            }
+            className="group relative cursor-pointer overflow-hidden rounded-lg shadow-md"
+          >
             <div className="relative aspect-[4/3] w-full">
               <Image
                 src={item.firstimage || '/error/no-image.png'}
@@ -56,7 +64,10 @@ export default function FavoritesContainer() {
               />
               {/* 삭제 버튼 */}
               <button
-                onClick={() => removeFavorite(item.contentid)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeFavorite(item.contentid);
+                }}
                 className="absolute right-2 top-2 rounded-full bg-white/90 p-2 shadow-md transition-all hover:bg-white"
                 aria-label="찜 해제"
               >

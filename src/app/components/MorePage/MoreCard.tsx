@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AreaItem } from '@/app/types/ItemType';
@@ -8,10 +11,10 @@ import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
 
 interface MoreCardProps {
   moreData: AreaItem[];
-  onClick: () => void;
 }
 
-const MoreCard = React.memo(({ moreData, onClick }: MoreCardProps) => {
+const MoreCard = React.memo(({ moreData }: MoreCardProps) => {
+  const router = useRouter();
   const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
 
   return (
@@ -33,7 +36,9 @@ const MoreCard = React.memo(({ moreData, onClick }: MoreCardProps) => {
             <div
               key={more.contentid}
               className="flex w-full cursor-pointer flex-col"
-              onClick={onClick}
+              onClick={() =>
+                router.push(`/detail/${more.contentid}?contentTypeId=${more.contenttypeid}`)
+              }
             >
               <div className="relative mb-2 aspect-[4/3] h-[34.38vw] w-full lg:h-[13.75rem]">
                 <Image

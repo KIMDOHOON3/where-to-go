@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AccomdationCard from '@/app/components/Accomdation/AccomdationCard';
 import { StayItem } from '@/app/types/ItemType';
@@ -13,6 +16,7 @@ export default function AccomdationList({
   onSlideChange,
   onCardClick,
 }: AccomdationListProps) {
+  const router = useRouter();
   return (
     <Swiper
       className="cursor-pointer !pb-3 lg:!pb-5 1xl:!pb-7"
@@ -25,7 +29,12 @@ export default function AccomdationList({
     >
       {stays.map((stay) => (
         <SwiperSlide key={stay.contentid}>
-          <AccomdationCard stay={stay} onClick={() => onCardClick()} />
+          <AccomdationCard
+            stay={stay}
+            onClick={() =>
+              router.push(`/detail/${stay.contentid}?contentTypeId=${stay.contenttypeid}`)
+            }
+          />
         </SwiperSlide>
       ))}
     </Swiper>

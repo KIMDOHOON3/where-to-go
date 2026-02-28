@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import dynamic from 'next/dynamic';
 import { useSearchData } from '@/app/hooks/useSearchData';
 import { SearchApiResponse } from '@/app/types/ItemType';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
@@ -9,12 +8,6 @@ import DataError from '@/app/components/Common/Error';
 import SearchSection from '@/app/components/Search/SearchSection';
 import SearchContainerSkeleton from '@/app/components/Search/SearchContainerSkeleton';
 import SearchSectionSkeleton from '@/app/components/Search/SearchSectionSkeleton';
-import { useModalLogic } from '@/app/hooks/useModalLogic';
-
-const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
-  ssr: false,
-  loading: () => null,
-});
 
 const contentTypeNames: { [key: string]: string } = {
   '12': '🏛️ 관광지',
@@ -31,7 +24,6 @@ export default function SearchContainer() {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const prevKeywordRef = useRef<string>('');
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const { isModalOpen, openModal, closeModal } = useModalLogic();
 
   const { data, isLoading, isError, error } = useSearchData(keyword, numOfRows, contentTypeId);
 
@@ -175,7 +167,6 @@ export default function SearchContainer() {
                   items={items}
                   isExpanded={expandedCategory === id}
                   onExpand={() => handleExpandCategory(id)}
-                  onClick={openModal}
                   highlightKeyword={highlightKeyword}
                   keyword={keyword}
                 />
@@ -191,7 +182,6 @@ export default function SearchContainer() {
                 items={groupedData[contentTypeId]}
                 isExpanded={expandedCategory === contentTypeId}
                 onExpand={() => handleExpandCategory(contentTypeId)}
-                onClick={openModal}
                 highlightKeyword={highlightKeyword}
                 keyword={keyword}
               />
@@ -206,7 +196,6 @@ export default function SearchContainer() {
           </div>
         )}
       </div>
-      {isModalOpen && <Modal onClose={closeModal} />}
     </div>
   );
 }

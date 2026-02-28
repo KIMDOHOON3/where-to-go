@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { useEventData } from '@/app/hooks/useEventData';
@@ -12,19 +12,13 @@ import EventPagination from '@/app/components/Event/EventPagination';
 import DataError from '@/app/components/Common/Error';
 import EmptyState from '@/app/components/Common/EmptyState';
 import EventSkeleton from '@/app/components/Event/EventSkeleton';
-import { useModalLogic } from '@/app/hooks/useModalLogic';
-
-const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
-  ssr: false,
-  loading: () => null,
-});
 
 export default function EventContents() {
+  const router = useRouter();
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [selectedArea, setSelectedArea] = useState<string>('전국');
-  const { isModalOpen, openModal, closeModal } = useModalLogic();
 
   useEffect(() => {
     setCurrentDate(new Date());
@@ -102,7 +96,12 @@ export default function EventContents() {
                   className="mr-4 !w-[65%] lg:!w-[45%] 2xl:!w-[50rem]"
                   key={event.contentid}
                 >
-                  <EventCard event={event} onClick={openModal} />
+                  <EventCard
+                    event={event}
+                    onClick={() =>
+                      router.push(`/detail/${event.contentid}?contentTypeId=${event.contenttypeid}`)
+                    }
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -118,7 +117,6 @@ export default function EventContents() {
           </div>
         )}
       </div>
-      {isModalOpen && <Modal onClose={closeModal} />}
     </section>
   );
 }

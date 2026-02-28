@@ -12,16 +12,10 @@ import DataError from '@/app/components/Common/Error';
 import EmptyState from '@/app/components/Common/EmptyState';
 import AreaSlideProps from '@/app/components/Area/AreaContents/AreaSlideProps';
 import { useAreaContentsLogic } from '@/app/hooks/useAreaContentsLogic';
-import { useModalLogic } from '@/app/hooks/useModalLogic';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
 
 const Toast = dynamic(() => import('@/app/components/Common/Toast'), {
   ssr: false,
-});
-
-const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
-  ssr: false,
-  loading: () => null,
 });
 
 export default function AreaContents() {
@@ -36,7 +30,6 @@ export default function AreaContents() {
     error,
   } = useAreaContentsLogic();
 
-  const { isModalOpen, openModal, closeModal } = useModalLogic();
   const { category } = useInteractionStore();
 
   // 에러 발생 시 표시할 UI
@@ -81,7 +74,7 @@ export default function AreaContents() {
                   key={generateKey(item)}
                   className="flex w-full max-w-[18.75rem] flex-row items-center justify-center pb-[0.9375rem] pr-[0.9375rem] lg:pb-[1.875rem]"
                 >
-                  <AreaSlideProps item={item} onClick={openModal} />
+                  <AreaSlideProps item={item} />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -95,7 +88,6 @@ export default function AreaContents() {
           strongText={category || '여행지'}
         />
       </section>
-      {isModalOpen && <Modal onClose={closeModal} />}
     </>
   );
 }
