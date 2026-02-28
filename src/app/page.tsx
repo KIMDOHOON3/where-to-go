@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import MainSlide from '@/app/components/MainSlide/MainSlide';
+import TodayRecommend from '@/app/components/TodayRecommend/TodayRecommend';
 import AccomdationContents from '@/app/components/Accomdation/AccomdationContents';
 import EventContents from '@/app/components/Event/EventContents';
 
@@ -41,6 +42,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <MainSlide />
+      <TodayRecommend />
       <AccomdationContents />
       <EventContents />
     </>

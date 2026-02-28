@@ -5,7 +5,7 @@ export default function Navigation() {
   return (
     <nav>
       <ul className="flex items-center justify-between lg:w-full lg:gap-[3.125rem]">
-        <li className="w-[33.33%] text-center lg:w-auto">
+        <li className="w-[25%] text-center lg:w-auto">
           <Link
             href="/"
             className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
@@ -15,7 +15,7 @@ export default function Navigation() {
             홈
           </Link>
         </li>
-        <li className="w-[33.33%] text-center lg:w-auto">
+        <li className="w-[25%] text-center lg:w-auto">
           <Link
             href="/area"
             className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
@@ -25,14 +25,24 @@ export default function Navigation() {
             지역
           </Link>
         </li>
-        <li className="w-[33.33%] text-center lg:w-auto">
+        <li className="w-[25%] text-center lg:w-auto">
           <Link
             href="/morepage"
             className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
               pathname === '/morepage' ? 'on' : ''
             }`}
           >
-            지역 더보기
+            더보기
+          </Link>
+        </li>
+        <li className="w-[25%] text-center lg:w-auto">
+          <Link
+            href="/favorites"
+            className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
+              pathname === '/favorites' ? 'on' : ''
+            }`}
+          >
+            찜
           </Link>
         </li>
       </ul>

@@ -47,7 +47,7 @@ export default function AccomdationContents() {
       {/* 추천 기준 설명 */}
       <div className="border-gray-200 mx-4 mt-4 rounded-lg border bg-white p-4 shadow-md">
         <p className="text-center text-sm lg:text-lg">
-          본 숙박시설은 한국관광공사의 인증을 받은
+          본 숙박시설은 한국관광공사의 인증을 받은123
           <br /> <span className="text-primary font-bold">&quot;베니키아&quot;</span>,{' '}
           <span className="text-primary font-bold">&quot;굿스테이&quot;</span> 숙소들로, 신뢰할 수
           있는 품질과 편안한 환경을 제공합니다.
