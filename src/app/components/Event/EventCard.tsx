@@ -10,10 +10,13 @@ interface EventCardProps {
   event: {
     contentid: string;
     firstimage?: string;
+    firstimage2?: string;
     title: string;
     addr1: string;
+    contenttypeid: string;
     eventstartdate: string;
     eventenddate: string;
+    tel?: string;
   };
   onClick: () => void;
 }
@@ -27,7 +30,12 @@ const EventCard = React.memo(({ event, onClick }: EventCardProps) => {
     if (isItemFavorite) {
       removeFavorite(event.contentid);
     } else {
-      addFavorite(event);
+      addFavorite({
+        ...event,
+        firstimage: event.firstimage || '',
+        firstimage2: event.firstimage2 || '',
+        tel: event.tel || '',
+      });
     }
   };
 

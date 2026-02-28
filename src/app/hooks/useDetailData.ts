@@ -1,21 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-interface DetailCommonData {
-  title: string;
-  addr1: string;
-  addr2?: string;
-  tel?: string;
-  homepage?: string;
-  firstimage?: string;
-  firstimage2?: string;
-  overview?: string;
-  mapx?: string;
-  mapy?: string;
-  contentid: string;
-  contenttypeid: string;
-}
-
 export const useDetailData = (contentId: string, contentTypeId?: string) => {
   return useQuery({
     queryKey: ['detail', contentId, contentTypeId],

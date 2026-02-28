@@ -13,10 +13,12 @@ import { filterAddress, filterTitle } from '@/app/utils/filterDate';
 interface ItemTypes {
   item: {
     firstimage: string;
+    firstimage2: string;
     title: string;
     contentid: string;
     contenttypeid: string;
     addr1?: string;
+    tel?: string;
   };
 }
 
@@ -30,7 +32,11 @@ const AreaSlideProps = React.memo(({ item }: ItemTypes) => {
     if (isItemFavorite) {
       removeFavorite(item.contentid);
     } else {
-      addFavorite(item);
+      addFavorite({
+        ...item,
+        addr1: item.addr1 || '',
+        tel: item.tel || '',
+      });
     }
   };
   return (

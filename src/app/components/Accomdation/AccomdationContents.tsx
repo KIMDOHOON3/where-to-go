@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useStayData } from '@/app/hooks/useStayData';
 import { useInteractionStore } from '@/app/stores/useInteractionStore';
@@ -11,18 +10,11 @@ import EmptyState from '@/app/components/Common/EmptyState';
 import AccomdationHeader from '@/app/components/Accomdation/AccomdationHeader';
 import AccomdationList from '@/app/components/Accomdation/AccomdationList';
 import AccomdationSkeleton from '@/app/components/Accomdation/AccomdationSkeleton';
-import { useModalLogic } from '@/app/hooks/useModalLogic';
 import { useUIStore } from '@/app/stores/useAreaUiStore';
-
-const Modal = dynamic(() => import('@/app/components/Common/Modal'), {
-  ssr: false,
-  loading: () => null,
-});
 
 export default function AccomdationContents() {
   const { setCurrentPage } = useInteractionStore();
   const { selectedArea, setSelectedArea } = useUIStore();
-  const { isModalOpen, openModal, closeModal } = useModalLogic();
 
   const { data: stayData, isLoading, error } = useStayData(selectedArea);
 
@@ -69,11 +61,7 @@ export default function AccomdationContents() {
           </div>
         ) : stayData && stayData.length > 0 ? (
           <>
-            <AccomdationList
-              stays={stayData}
-              onSlideChange={setCurrentPage}
-              onCardClick={openModal}
-            />
+            <AccomdationList stays={stayData} onSlideChange={setCurrentPage} />
             <ProgressBar totalPages={stayData.length} />
           </>
         ) : (
@@ -83,7 +71,6 @@ export default function AccomdationContents() {
         )}
       </div>
       <MoreButton href="/morepage" text="더많은" strongText="여행정보" />
-      {isModalOpen && <Modal onClose={closeModal} />}
     </section>
   );
 }

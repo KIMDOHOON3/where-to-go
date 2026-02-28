@@ -48,7 +48,7 @@ export default function DetailContainer({
     );
   }
 
-  const { common, intro } = data;
+  const { common } = data;
   const isItemFavorite = isFavorite(contentId);
 
   const handleFavoriteClick = () => {

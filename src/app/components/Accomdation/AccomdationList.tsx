@@ -8,13 +8,11 @@ import { StayItem } from '@/app/types/ItemType';
 interface AccomdationListProps {
   stays: StayItem[];
   onSlideChange: (index: number) => void;
-  onCardClick: () => void;
 }
 
 export default function AccomdationList({
   stays,
   onSlideChange,
-  onCardClick,
 }: AccomdationListProps) {
   const router = useRouter();
   return (
