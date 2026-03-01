@@ -57,30 +57,41 @@ export default function ThemeDetailPage({ params }: ThemePageProps) {
     staleTime: 1000 * 60 * 30,
   });
 
-  // 테마 키워드로 정렬 (필터링이 아닌 정렬)
+  // 테마 키워드로 필터링 및 정렬
   const filteredCourses = useMemo(() => {
     if (!courseQueries.data || !theme) return [];
 
-    // 모든 데이터를 먼저 정렬
+    // 모든 데이터를 먼저 점수 계산
     const scored = courseQueries.data.map((course) => {
       const title = (course.title || '').toLowerCase();
       const addr = (course.addr1 || '').toLowerCase();
-      const searchText = `${title} ${addr}`;
+      const overview = (course.overview || '').toLowerCase();
 
       // 키워드 매칭 점수 계산
       let score = 0;
       theme.keywords.forEach((keyword) => {
-        if (searchText.includes(keyword.toLowerCase())) {
-          score += 100;
-        }
+        const keywordLower = keyword.toLowerCase();
+        // 제목에서 찾으면 높은 점수 (여러 번 찾을 수 있음)
+        const titleMatches = (title.match(new RegExp(keywordLower, 'g')) || []).length;
+        score += titleMatches * 200;
+
+        // 주소에서 찾으면 중간 점수
+        const addrMatches = (addr.match(new RegExp(keywordLower, 'g')) || []).length;
+        score += addrMatches * 100;
+
+        // 설명에서 찾으면 낮은 점수
+        const overviewMatches = (overview.match(new RegExp(keywordLower, 'g')) || []).length;
+        score += overviewMatches * 50;
       });
 
-      // 점수가 없으면 최소값 (모든 관광지 포함)
       return { ...course, themeScore: score };
     });
 
-    // 테마 점수로 정렬 (높은 점수 먼저)
-    return scored.sort((a, b) => b.themeScore - a.themeScore);
+    // 점수가 0 이상인 것만 필터링하고 정렬 (높은 점수 먼저)
+    // 점수가 없으면 제외
+    return scored
+      .filter((course) => course.themeScore > 0)
+      .sort((a, b) => b.themeScore - a.themeScore);
   }, [courseQueries.data, theme]);
 
   const displayed = filteredCourses.slice(0, displayCount);
