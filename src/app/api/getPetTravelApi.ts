@@ -1,41 +1,47 @@
 import axios from 'axios';
-import { StayItem } from '@/app/types/ItemType';
+import { PetTravelItem } from '@/app/types/ItemType';
 import { areaCodeMap } from '@/app/constant/SlideConstant';
 import { handleAxiosError, logError } from '@/app/utils/errorHandler';
 import { ERROR_MESSAGES } from '@/app/constant/errorMessages';
 
-export const getStayApi = async (selectedArea: string): Promise<StayItem[]> => {
+export const getPetTravelApi = async (
+  selectedArea: string,
+  numOfRows: number,
+  pageNo: number
+): Promise<PetTravelItem[]> => {
   const areaCode = areaCodeMap[selectedArea] || '';
 
   const params = {
-    pageNo: 1,
-    numOfRows: 10,
+    pageNo,
+    numOfRows,
     areaCode,
     arrange: 'R',
+    contentTypeId: '12', // 관광지 (반려동물 동반 가능 필터링은 별도)
   };
 
   try {
-    const response = await axios.get('/api/stay', {
+    const response = await axios.get('/api/pettravel', {
       params,
       timeout: 30000,
     });
 
-    const rawItems = response.data?.response?.body?.items?.item ?? [];
-    const items = Array.isArray(rawItems) ? rawItems : [rawItems];
+    const items = response.data?.response?.body?.items?.item ?? [];
+    const list = Array.isArray(items) ? items : [items];
 
-    return items.map((item) => ({
+    return list.map((item: PetTravelItem) => ({
       title: item.title ?? '',
       addr1: item.addr1 ?? '',
       mapx: item.mapx ?? '',
       mapy: item.mapy ?? '',
       firstimage: item.firstimage ?? '',
       firstimage2: item.firstimage2 ?? '',
-      contentid: item.contentid ?? '',
       contenttypeid: item.contenttypeid ?? '',
+      contentid: item.contentid ?? '',
       areacode: item.areacode ?? '',
+      tel: item.tel ?? '',
     }));
   } catch (error) {
-    logError('getStayApi', error);
-    throw handleAxiosError(error, ERROR_MESSAGES.STAY);
+    logError('getPetTravelApi', error);
+    throw handleAxiosError(error, ERROR_MESSAGES.TOUR_LIST);
   }
 };

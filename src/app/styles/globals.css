@@ -212,3 +212,23 @@ body {
     color: var(--black);
   }
 }
+
+/* 여행 타입 Swiper 스타일 */
+.travel-type-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: var(--gray);
+  opacity: 1;
+}
+
+.travel-type-swiper .swiper-pagination-bullet-active {
+  background: var(--black);
+}
+
+.travel-type-swiper .swiper-slide {
+  transition: transform 0.3s ease;
+}
+
+.travel-type-swiper .swiper-slide-active {
+  transform: scale(1.05);
+}

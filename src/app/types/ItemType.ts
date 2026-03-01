@@ -101,3 +101,60 @@ export type UserLocation = {
   latitude: number;
   longitude: number;
 } | null;
+
+/**
+ * 여행 코스 정보 타입
+ */
+export interface CourseItem {
+  title: string;
+  addr1: string;
+  mapx: string;
+  mapy: string;
+  firstimage: string;
+  firstimage2: string;
+  contenttypeid: string;
+  contentid: string;
+  areacode?: string;
+  cat1?: string;
+  cat2?: string;
+  cat3?: string;
+  overview?: string;
+}
+
+/**
+ * 반려동물 동반 여행 정보 타입
+ */
+export interface PetTravelItem {
+  title: string;
+  addr1: string;
+  mapx: string;
+  mapy: string;
+  firstimage: string;
+  firstimage2: string;
+  contenttypeid: string;
+  contentid: string;
+  areacode?: string;
+  tel?: string;
+  petTursmInfo?: string; // 반려동물 동반 정보
+}
+
+/**
+ * 관광빅데이터 방문자 통계 타입
+ */
+export interface VisitorStatsItem {
+  baseYmd: string; // 기준일자 (YYYYMMDD)
+  areaCode: string; // 지역코드
+  areaNm: string; // 지역명
+  touNum: number; // 관광객 수
+  touDivNm?: string; // 관광객 구분명 (내국인/외국인)
+  signguCode?: string; // 시군구코드
+  signguNm?: string; // 시군구명
+}
+
+/**
+ * 인기도 기반 코스 아이템 (방문자 수 포함)
+ */
+export interface PopularCourseItem extends CourseItem {
+  visitorCount?: number; // 방문자 수
+  popularityRank?: number; // 인기도 순위
+}

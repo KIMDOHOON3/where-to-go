@@ -1,14 +1,18 @@
 'use client';
 
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useDetailData, KakaoDocument, WikiSearchItem, ImageItem } from '@/app/hooks/useDetailData';
+import { useDetailData, WikiSearchItem, KakaoDocument, ImageItem } from '@/app/hooks/useDetailData';
 import { TourApiRawItem } from '@/app/types/ApiResponseTypes';
 import { useFavoriteStore } from '@/app/stores/useFavoriteStore';
-import Skeleton from '@/app/components/Common/Skeleton';
-import createKakaoMapURL from '@/app/utils/createKakaoMapURL';
+import DetailSkeleton from '@/app/components/Detail/DetailSkeleton';
+import DetailErrorBoundary from '@/app/components/Detail/DetailErrorBoundary';
+import DetailHeader from '@/app/components/Detail/DetailHeader';
+import DetailInfoBox from '@/app/components/Detail/DetailInfoBox';
+import DetailGallery from '@/app/components/Detail/DetailGallery';
+import DetailInteractiveMap from '@/app/components/Detail/DetailInteractiveMap';
+import DetailNearbyPlaces from '@/app/components/Detail/DetailNearbyPlaces';
+import RelatedCourses from '@/app/components/Detail/RelatedCourses';
 
 interface DetailContainerProps {
   contentId: string;
@@ -35,8 +39,6 @@ export default function DetailContainer({ contentId, contentTypeId }: DetailCont
     resolvedTitle
   );
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
   // 키를 사람이 읽기 좋게 변환
   const prettyKey = (k: string) =>
     k
@@ -46,14 +48,7 @@ export default function DetailContainer({ contentId, contentTypeId }: DetailCont
   const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
 
   if (isLoading) {
-    return (
-      <div className="mx-auto max-w-4xl px-4 pb-8 pt-12 pt-[3.125rem] lg:pt-24 lg:pt-[5.625rem]">
-        <Skeleton className="mb-4 h-8 w-32" />
-        <Skeleton className="mb-6 h-96 w-full" />
-        <Skeleton className="mb-4 h-8 w-64" />
-        <Skeleton className="mb-4 h-24 w-full" />
-      </div>
-    );
+    return <DetailSkeleton />;
   }
 
   const commonObj = data?.common as (TourApiRawItem & Record<string, unknown>) | null; // API 스펙 불명
@@ -69,26 +64,7 @@ export default function DetailContainer({ contentId, contentTypeId }: DetailCont
     images.unshift({ originimgurl: resolvedImage });
   }
   const mainImage =
-    selectedImage ||
-    resolvedImage ||
-    commonObj?.firstimage ||
-    commonObj?.firstimage2 ||
-    '/error/no-image.png';
-
-  // 갤러리 요소를 미리 계산해서 JSX 내부에서 unknown 문제가 생기지 않도록
-  const gallery: any = !!images.length ? (
-    <div className="mb-4 flex gap-2 overflow-x-auto">
-      {images.map((img, idx) => (
-        <div
-          key={idx}
-          className="relative h-24 w-24 flex-shrink-0 cursor-pointer"
-          onClick={() => setSelectedImage(img.originimgurl)}
-        >
-          <Image src={img.originimgurl} alt="사진" fill className="rounded object-cover" />
-        </div>
-      ))}
-    </div>
-  ) : null;
+    resolvedImage || commonObj?.firstimage || commonObj?.firstimage2 || '/error/no-image.png';
 
   if (error || !hasValidCommon) {
     console.error('DetailContainer 에러:', {
@@ -255,168 +231,68 @@ export default function DetailContainer({ contentId, contentTypeId }: DetailCont
     return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ');
   };
 
+  const getIntroSummary = (intro: unknown) => {
+    if (!intro || typeof intro !== 'object') return '';
+
+    const introObj = intro as Record<string, unknown>;
+    const summaryKeys = ['infocenter', 'usetime', 'expguide', 'parking', 'restdate'];
+
+    const lines = summaryKeys
+      .map((key) => {
+        const value = introObj[key];
+        if (!value || typeof value !== 'string') return '';
+        const cleaned = stripHtml(value).trim();
+        return cleaned ? cleaned : '';
+      })
+      .filter(Boolean);
+
+    return lines.join('\n');
+  };
+
+  const mappedOverview =
+    common.overview && String(common.overview).trim().length > 0
+      ? stripHtml(String(common.overview))
+      : getIntroSummary(data?.intro);
+
   return (
-    <div className="mx-auto max-w-4xl px-4 pb-8 pt-12 pt-[3.125rem] lg:pt-24 lg:pt-[5.625rem]">
-      {/* 뒤로가기 버튼 */}
-      <button
-        onClick={() => router.back()}
-        className="text-gray-600 hover:text-gray-900 mb-4 flex items-center gap-2"
-      >
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        뒤로가기
-      </button>
-
-      {/* 메인 이미지 */}
-      <div className="relative mb-6 h-96 w-full overflow-hidden rounded-lg">
-        <Image
-          src={mainImage}
-          alt={common?.title || resolvedTitle || ''}
-          fill
-          className="object-cover"
-          priority
+    <DetailErrorBoundary>
+      <div className="mx-auto max-w-4xl px-4 pb-8 pt-12 pt-[3.125rem] lg:pt-24 lg:pt-[5.625rem]">
+        {/* 헤더 (뒤로가기, 타이틀, 찜 버튼, 메인 이미지) */}
+        <DetailHeader
+          title={common?.title || resolvedTitle || '제목 정보 없음'}
+          mainImage={mainImage}
+          isFavorite={isItemFavorite}
+          onFavoriteClick={handleFavoriteClick}
+          onBackClick={() => router.back()}
         />
-        {/* 하트 버튼 */}
-        <button
-          onClick={handleFavoriteClick}
-          className="bg-white/80 absolute right-4 top-4 rounded-full p-3 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white"
-          aria-label={isItemFavorite ? '찜 해제' : '찜하기'}
-        >
-          <svg
-            className="h-6 w-6"
-            fill={isItemFavorite ? '#ef4444' : 'none'}
-            stroke={isItemFavorite ? '#ef4444' : '#374151'}
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
+
+        {/* 갤러리 (썸네일 선택) */}
+        <DetailGallery mainImage={mainImage} images={images} />
+
+        {/* 기본 정보 (주소, 전화, 홈페이지, 개요) */}
+        <DetailInfoBox
+          address={`${common.addr1 || ''} ${common.addr2 || ''}`.trim()}
+          phone={common.tel}
+          homepage={String(common.homepage || '')}
+          overview={mappedOverview}
+        />
+
+        {/* 인터랙티브 지도 (마커 포함) */}
+        <DetailInteractiveMap
+          title={common?.title || resolvedTitle || ''}
+          mapx={common.mapx}
+          mapy={common.mapy}
+        />
+
+        {/* 주변 숙박/음식점 */}
+        <DetailNearbyPlaces mapx={common.mapx} mapy={common.mapy} />
+
+        {/* 관련 코스 추천 */}
+        <RelatedCourses
+          region={String(common.areacode || '1')}
+          currentContentId={resolvedContentId}
+        />
       </div>
-
-      {/* 썸네일 갤러리 */}
-      {gallery}
-
-      {/* 제목 */}
-      <h1 className="mb-4 text-3xl font-bold">
-        {common?.title || resolvedTitle || '제목 정보 없음'}
-      </h1>
-
-      {/* 기본 정보 */}
-      <div className="bg-gray-50 mb-6 rounded-lg p-6">
-        <div className="grid gap-4">
-          {common.addr1 && (
-            <div className="flex items-start gap-3">
-              <svg
-                className="text-gray-600 mt-1 h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              <div className="flex-1">
-                <p className="text-gray-700">
-                  {common.addr1} {common.addr2}
-                </p>
-                <Link
-                  href={createKakaoMapURL(common.addr1)}
-                  target="_blank"
-                  className="mt-2 inline-block text-sm text-indigo-600 hover:text-indigo-800"
-                >
-                  카카오맵에서 보기 →
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {common.tel && (
-            <div className="flex items-center gap-3">
-              <svg
-                className="text-gray-600 h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                />
-              </svg>
-              <a href={`tel:${common.tel}`} className="text-gray-700 hover:text-indigo-600">
-                {common.tel}
-              </a>
-            </div>
-          )}
-
-          {!!common.homepage && (
-            <div className="flex items-center gap-3">
-              <svg
-                className="text-gray-600 h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                />
-              </svg>
-              <div
-                className="text-gray-700 text-sm"
-                dangerouslySetInnerHTML={{ __html: common.homepage }}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* 개요 */}
-      {common.overview && (
-        <div className="mb-6">
-          <h2 className="mb-3 text-xl font-bold">소개</h2>
-          <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-            {stripHtml(String(common.overview))}
-          </p>
-        </div>
-      )}
-
-      {/* 카카오맵 임베드 (선택사항) */}
-      {common.mapx && common.mapy && (
-        <div className="mb-6">
-          <h2 className="mb-3 text-xl font-bold">위치</h2>
-          <div className="bg-gray-200 h-96 w-full overflow-hidden rounded-lg">
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://map.kakao.com/link/map/${common.title},${common.mapy},${common.mapx}`}
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-            ></iframe>
-          </div>
-        </div>
-      )}
-    </div>
+    </DetailErrorBoundary>
   );
 }

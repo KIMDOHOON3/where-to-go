@@ -16,4 +16,6 @@ export const ERROR_MESSAGES = {
   STAY: '숙소 데이터를 불러올 수 없습니다.',
   SEARCH: '검색 결과를 불러올 수 없습니다.',
   LOCATION: '위치 기반 데이터를 불러올 수 없습니다.',
+  COURSE: '여행 코스 데이터를 불러올 수 없습니다.',
+  PET_TRAVEL: '반려동물 동반 여행 데이터를 불러올 수 없습니다.',
 } as const;

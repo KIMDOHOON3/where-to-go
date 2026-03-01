@@ -7,7 +7,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: true, // Vercel 무료 플랜 이미지 최적화 제한 회피
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

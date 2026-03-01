@@ -22,9 +22,9 @@ export const getTourListApi = async (
   };
 
   try {
-    const response = await axios.get('/api/tourlist', { 
+    const response = await axios.get('/api/tourlist', {
       params,
-      timeout: 10000,
+      timeout: 30000,
     });
 
     const items = response.data?.response?.body?.items?.item ?? [];

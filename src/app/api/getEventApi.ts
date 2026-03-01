@@ -27,7 +27,7 @@ export const getEventApi = async (
         numOfRows: options?.numOfRows || 5,
         arrange: 'R',
       },
-      timeout: 10000, 
+      timeout: 30000,
     });
 
     const rawItems = response.data?.response?.body?.items?.item;

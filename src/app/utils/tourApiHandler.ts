@@ -65,7 +65,7 @@ export async function handleTourApiRequest(
   try {
     const response = await axios.get(apiUrl, {
       params: apiParams,
-      timeout: 10000,
+      timeout: 30000,
     });
 
     // 공공데이터 API 에러 체크
@@ -152,4 +152,3 @@ export const commonValidations = {
     message: 'lDongRegnCd is required when lDongSignguCd is provided',
   },
 };
-

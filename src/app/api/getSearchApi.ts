@@ -22,16 +22,14 @@ export const getSearchApi = async (
     }).filter(([, v]) => v !== null && v !== undefined && v !== '')
   );
 
-
   try {
     const response = await axios.get('/api/search', {
       params,
-      timeout: 10000,
+      timeout: 30000,
     });
 
     const items = response.data?.response?.body?.items?.item ?? [];
     const list = Array.isArray(items) ? items : [items];
-
 
     return list.map((item) => ({
       title: item.title ?? '',
