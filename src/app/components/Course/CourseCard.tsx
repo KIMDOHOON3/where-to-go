@@ -30,7 +30,7 @@ const CourseCard = ({ course, regionLabel, areaCode, rank }: CourseCardProps) =>
       warm: { emoji: '⭐', label: '인기', color: 'bg-yellow-100 text-yellow-700' },
       cool: { emoji: '💎', label: '숨은명소', color: 'bg-blue-100 text-blue-700' },
     };
-    return badgeMap[trend] || badgeMap['cool'];
+    return badgeMap[trend] || badgeMap['cool']!;
   };
 
   const trend = bigData?.trend || 'cool';
@@ -76,7 +76,7 @@ const CourseCard = ({ course, regionLabel, areaCode, rank }: CourseCardProps) =>
               </span>
             )}
 
-            {!bigDataLoading && (
+            {!bigDataLoading && badge && (
               <span
                 className={`${badge.color} inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold`}
               >
