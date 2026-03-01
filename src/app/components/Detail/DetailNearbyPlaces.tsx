@@ -25,10 +25,10 @@ const DetailNearbyPlaces = ({ mapx, mapy }: DetailNearbyPlacesProps) => {
         <h2 className="mb-4 text-xl font-bold">주변 추천</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="space-y-3 rounded-lg border border-gray-200 p-4">
-              <div className="h-40 animate-pulse rounded-lg bg-gray-200" />
-              <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
-              <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200" />
+            <div key={i} className="border-gray-200 space-y-3 rounded-lg border p-4">
+              <div className="bg-gray-200 h-40 animate-pulse rounded-lg" />
+              <div className="bg-gray-200 h-4 w-3/4 animate-pulse rounded" />
+              <div className="bg-gray-200 h-3 w-1/2 animate-pulse rounded" />
             </div>
           ))}
         </div>
