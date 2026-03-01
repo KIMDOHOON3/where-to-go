@@ -188,7 +188,15 @@ const AllRecommendedCourseGrid = ({ selectedArea }: AllRecommendedCourseGridProp
     return (
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="bg-gray-200 h-64 animate-pulse rounded-2xl" />
+          <div key={i} className="space-y-3 rounded-2xl border border-gray-200 p-4">
+            <div className="h-64 animate-pulse rounded-lg bg-gray-200" />
+            <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+            <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200" />
+            <div className="flex gap-2">
+              <div className="h-3 w-16 animate-pulse rounded-full bg-gray-200" />
+              <div className="h-3 w-12 animate-pulse rounded-full bg-gray-200" />
+            </div>
+          </div>
         ))}
       </div>
     );

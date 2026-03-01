@@ -3,5 +3,13 @@ interface SkeletonProps {
 }
 
 export default function Skeleton({ className = '' }: SkeletonProps) {
-  return <div className={`shinny rounded-md bg-[#A4A1AA] ${className} `} />;
+  return (
+    <div
+      className={`shinny rounded-md bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 ${className}`}
+      style={{
+        backgroundSize: '200% 100%',
+        animation: 'shimmer 2s infinite',
+      }}
+    />
+  );
 }
