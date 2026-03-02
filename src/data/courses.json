@@ -1,0 +1,120 @@
+[
+  {
+    "id": "jeju-east-01",
+    "theme": "고요한 동쪽의 재발견",
+    "description": "성산일출봉 뒤편, 현지인만 아는 비밀 해변을 끼고 돕니다.",
+    "image": "/images/jeju-east.jpg",
+    "duration": "4시간",
+    "region": "동부",
+    "items": [
+      {
+        "time": "10:00",
+        "name": "수산리 비석거리 숲길",
+        "type": "Spot",
+        "image": "/images/forest.jpg",
+        "tip": "입구가 작으니 주차장 표시를 잘 보세요.",
+        "link": "https://map.kakao.com/link/map/수산리비석거리,33.4567,126.9876"
+      },
+      {
+        "time": "11:30",
+        "name": "온평리 숨은 해변",
+        "type": "Beach",
+        "image": "/images/beach.jpg",
+        "tip": "물때를 확인하고 가세요. 썰물 때가 제일 예뻐요.",
+        "link": "https://map.kakao.com/link/map/온평리해변,33.4678,126.9987"
+      },
+      {
+        "time": "12:30",
+        "name": "성산 이름없는 고기국수",
+        "type": "Food",
+        "image": "/images/noodle.jpg",
+        "tip": "비빔국수가 의외의 별미입니다.",
+        "link": "https://map.kakao.com/link/map/고기국수,33.4789,127.0098"
+      },
+      {
+        "time": "14:00",
+        "name": "광치기 해변 돌담길",
+        "type": "Walk",
+        "image": "/images/stone-wall.jpg",
+        "tip": "해질녘이 가장 아름답지만 오후 2시도 좋습니다.",
+        "link": "https://map.kakao.com/link/map/광치기해변,33.4890,127.0209"
+      }
+    ]
+  },
+  {
+    "id": "jeju-west-01",
+    "theme": "한림의 오래된 이야기",
+    "description": "관광객이 스쳐가는 한림, 천천히 걸으면 보이는 것들.",
+    "image": "/images/jeju-west.jpg",
+    "duration": "5시간",
+    "region": "서부",
+    "items": [
+      {
+        "time": "09:00",
+        "name": "금능 작은 포구",
+        "type": "Spot",
+        "image": "/images/harbor.jpg",
+        "tip": "아침 7시에 배가 들어옵니다. 신선한 해산물 구경하세요.",
+        "link": "https://map.kakao.com/link/map/금능포구,33.3890,126.2345"
+      },
+      {
+        "time": "10:30",
+        "name": "한림공원 뒷길 카페골목",
+        "type": "Cafe",
+        "image": "/images/cafe-street.jpg",
+        "tip": "관광지 앞은 피하고, 뒷골목으로 가세요.",
+        "link": "https://map.kakao.com/link/map/한림카페골목,33.3901,126.2456"
+      },
+      {
+        "time": "12:00",
+        "name": "협재 말고, 금능 해수욕장",
+        "type": "Beach",
+        "image": "/images/geumneung-beach.jpg",
+        "tip": "협재보다 조용하고 물은 더 맑아요.",
+        "link": "https://map.kakao.com/link/map/금능해수욕장,33.3912,126.2567"
+      },
+      {
+        "time": "13:30",
+        "name": "할머니 보말죽집",
+        "type": "Food",
+        "image": "/images/bomal.jpg",
+        "tip": "간판도 없습니다. 네비 주소 꼭 저장하세요.",
+        "link": "https://map.kakao.com/link/map/보말죽,33.3923,126.2678"
+      }
+    ]
+  },
+  {
+    "id": "jeju-south-01",
+    "theme": "서귀포 아침 안개 루트",
+    "description": "새벽 6시, 안개 낀 서귀포에서만 볼 수 있는 풍경.",
+    "image": "/images/jeju-south.jpg",
+    "duration": "3시간",
+    "region": "남부",
+    "items": [
+      {
+        "time": "06:00",
+        "name": "정방폭포 앞 산책로",
+        "type": "Walk",
+        "image": "/images/jeongbang.jpg",
+        "tip": "아직 관광객이 없어요. 조용한 새벽 바다.",
+        "link": "https://map.kakao.com/link/map/정방폭포,33.2345,126.5678"
+      },
+      {
+        "time": "07:00",
+        "name": "천지연 폭포 뒷길",
+        "type": "Spot",
+        "image": "/images/cheonjiyeon.jpg",
+        "tip": "정문 말고 뒷문으로 들어가면 사람이 없어요.",
+        "link": "https://map.kakao.com/link/map/천지연뒷길,33.2456,126.5789"
+      },
+      {
+        "time": "08:00",
+        "name": "서귀 아침 호박죽",
+        "type": "Food",
+        "image": "/images/pumpkin-soup.jpg",
+        "tip": "60년 전통 호박죽. 새벽에만 엽니다.",
+        "link": "https://map.kakao.com/link/map/호박죽,33.2567,126.5890"
+      }
+    ]
+  }
+]
