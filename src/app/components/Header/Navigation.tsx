@@ -27,12 +27,32 @@ export default function Navigation() {
         </li>
         <li className="w-[25%] text-center lg:w-auto">
           <Link
-            href="/morepage"
+            href="/course/all"
             className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
-              pathname === '/morepage' ? 'on' : ''
+              pathname === '/course/all' ? 'on' : ''
             }`}
           >
-            더보기
+            코스
+          </Link>
+        </li>
+        <li className="hidden text-center lg:block lg:w-auto">
+          <Link
+            href="/theme"
+            className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
+              pathname === '/theme' ? 'on' : ''
+            }`}
+          >
+            테마
+          </Link>
+        </li>
+        <li className="hidden text-center lg:block lg:w-auto">
+          <Link
+            href="/festival"
+            className={`nav-affter relative block w-full py-[0.625rem] text-[0.875rem] lg:text-[1.25rem] ${
+              pathname === '/festival' ? 'on' : ''
+            }`}
+          >
+            축제
           </Link>
         </li>
         <li className="w-[25%] text-center lg:w-auto">

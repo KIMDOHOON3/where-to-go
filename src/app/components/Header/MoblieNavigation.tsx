@@ -45,10 +45,10 @@ export default function MobileNavigation() {
         </li>
         <li className="w-[25%] text-center lg:w-auto">
           <Link
-            href="/morepage"
+            href="/course/all"
             className="relative flex w-full flex-col gap-1 py-[0.625rem] text-[0.875rem] lg:text-[1.25rem]"
           >
-            <FontAwesomeIcon icon={faMap} /> <span>지역 더보기</span>
+            <FontAwesomeIcon icon={faMap} /> <span>코스</span>
           </Link>
         </li>
         <li className="w-[25%] text-center lg:w-auto">
