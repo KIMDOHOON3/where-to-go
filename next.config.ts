@@ -1,20 +1,7 @@
-import type { NextConfig } from 'next';
-import bundleAnalyzer from '@next/bundle-analyzer';
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-});
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: {
-    unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'tong.visitkorea.or.kr',
-      },
-    ],
+  compiler: {
+    emotion: true,
   },
 };
-
-export default withBundleAnalyzer(nextConfig);

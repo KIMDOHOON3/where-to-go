@@ -1,8 +1,15 @@
+"use client";
+
+import { useState } from "react";
+import FirstSection from "@/components/section/intro/firstSection";
+import MainScreen from "@/components/section/main/MainScreen";
+
 export default function Home() {
-  return (
-    <main>
-      <h1>새 프로젝트 시작</h1>
-      <p>여기서부터 시작하세요.</p>
-    </main>
-  );
+  const [isOnboarded, setIsOnboarded] = useState(false);
+
+  if (isOnboarded) {
+    return <MainScreen />;
+  }
+
+  return <FirstSection onComplete={() => setIsOnboarded(true)} />;
 }
