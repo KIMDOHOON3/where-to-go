@@ -131,7 +131,6 @@ interface Props {
   memories?: Memory[];
   activeFilter?: string;
   onFilterChange?: (f: string) => void;
-  onAdd?: () => void;
   showAll?: boolean;
 }
 
@@ -139,7 +138,6 @@ export default function MemoryGrid({
   memories = SAMPLE_MEMORIES,
   activeFilter = "전체",
   onFilterChange,
-  onAdd,
   showAll = false,
 }: Props) {
   const filtered =

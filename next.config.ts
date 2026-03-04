@@ -5,3 +5,5 @@ const nextConfig: NextConfig = {
     emotion: true,
   },
 };
+
+export default nextConfig;
