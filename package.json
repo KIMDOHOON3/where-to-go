@@ -1,44 +1,27 @@
 {
-  "name": "trip",
+  "name": "couple",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fortawesome/fontawesome-svg-core": "^6.7.1",
-    "@fortawesome/free-brands-svg-icons": "^6.7.2",
-    "@fortawesome/free-regular-svg-icons": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.1",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@tanstack/react-query": "^5.63.0",
-    "axios": "^1.7.8",
-    "framer-motion": "^12.34.3",
-    "lodash": "^4.17.21",
-    "lucide-react": "^0.576.0",
     "next": "^16.1.1",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-intersection-observer": "^9.16.0",
-    "swiper": "^12.1.2",
-    "zustand": "^5.0.3"
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^16.1.6",
-    "@types/lodash": "^4.17.16",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.24.1",
     "@typescript-eslint/parser": "^8.24.1",
-    "cross-env": "^10.1.0",
     "eslint": "^9.20.1",
     "eslint-config-next": "15.0.3",
     "eslint-plugin-prettier": "^5.2.3",

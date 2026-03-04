@@ -1,11 +1,9 @@
 :root {
-  --color-primary: #ff85a1;
-  --color-secondary: #7eb2ff;
-  --color-bg: #fdfcfb;
-  --color-surface: #ffffff;
-  --color-text: #212121;
-  --color-text-sub: #757575;
-  --color-disabled: #bdbdbd;
+  --color-bg: #ffeae8;
+  --color-white: #ffffff;
+  --color-black: #212121;
+  --color-red: #f44336;
+  --color-gray: #c5c5be;
 }
 
 * {
@@ -23,7 +21,7 @@ body {
     "Segoe UI",
     sans-serif;
   background: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-black);
   overflow-x: hidden;
 }
 
