@@ -59,7 +59,11 @@ const Dot = styled.div<{ active: boolean }>`
 
 const STEPS: Step[] = ["welcome", "connect", "date", "ready"];
 
-export default function FirstSection() {
+interface Props {
+  onComplete?: () => void;
+}
+
+export default function FirstSection({ onComplete }: Props) {
   const [step, setStep] = useState<Step>("welcome");
   const [firstDate, setFirstDate] = useState<Date | null>(null);
 
@@ -89,7 +93,7 @@ export default function FirstSection() {
         {step === "ready" && (
           <ReadyStep
             firstDate={firstDate}
-            onStart={() => alert("🎉 앱 메인 화면으로 이동!")}
+            onStart={() => onComplete?.()}
           />
         )}
       </Phone>
