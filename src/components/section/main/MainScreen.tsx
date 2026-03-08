@@ -7,6 +7,7 @@ import BottomNav, { TabType } from "@/components/layout/BottomNav";
 import HomeTab from "@/components/section/main/HomeTab";
 import CalendarTab from "@/components/section/main/CalendarTab";
 import GalleryTab from "@/components/section/gallery/GalleryTab";
+import WishTab from "@/components/section/wish/WishTab";
 import MoreTab from "@/components/section/main/MoreTab";
 
 const fadeIn = keyframes`
@@ -66,6 +67,7 @@ export default function MainScreen() {
           {activeTab === "home" && <HomeTab />}
           {activeTab === "calendar" && <CalendarTab />}
           {activeTab === "gallery" && <GalleryTab />}
+          {activeTab === "wish" && <WishTab />}
           {activeTab === "more" && <MoreTab />}
         </TabContent>
 

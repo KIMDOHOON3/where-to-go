@@ -20,6 +20,16 @@ export interface DateEvent {
   color: string;
 }
 
+// 위시리스트 타입
+export interface Wish {
+  id: string;
+  title: string;
+  category: string;
+  emoji: string;
+  completed: boolean;
+  createdAt: string;
+}
+
 interface CoupleState {
   // 온보딩 완료 여부
   isOnboarded: boolean;
@@ -41,6 +51,9 @@ interface CoupleState {
   // 기념일/이벤트 목록
   events: DateEvent[];
 
+  // 위시리스트
+  wishes: Wish[];
+
   // 액션
   setOnboarded: (value: boolean) => void;
   setStartDate: (date: Date) => void;
@@ -59,6 +72,11 @@ interface CoupleState {
   addEvent: (event: Omit<DateEvent, "id">) => void;
   removeEvent: (id: string) => void;
 
+  // 위시리스트 액션
+  addWish: (wish: Omit<Wish, "id" | "completed" | "createdAt">) => void;
+  removeWish: (id: string) => void;
+  toggleWish: (id: string) => void;
+
   reset: () => void;
 }
 
@@ -76,6 +94,7 @@ export const useCoupleStore = create<CoupleState>()(
       isConnected: false,
       memories: [],
       events: [],
+      wishes: [],
 
       setOnboarded: (value) => set({ isOnboarded: value }),
       setStartDate: (date) => set({ startDate: date.toISOString() }),
@@ -103,6 +122,29 @@ export const useCoupleStore = create<CoupleState>()(
           events: state.events.filter((e) => e.id !== id),
         })),
 
+      addWish: (wish) =>
+        set((state) => ({
+          wishes: [
+            ...state.wishes,
+            {
+              ...wish,
+              id: generateId(),
+              completed: false,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        })),
+      removeWish: (id) =>
+        set((state) => ({
+          wishes: state.wishes.filter((w) => w.id !== id),
+        })),
+      toggleWish: (id) =>
+        set((state) => ({
+          wishes: state.wishes.map((w) =>
+            w.id === id ? { ...w, completed: !w.completed } : w
+          ),
+        })),
+
       reset: () =>
         set({
           isOnboarded: false,
@@ -113,6 +155,7 @@ export const useCoupleStore = create<CoupleState>()(
           isConnected: false,
           memories: [],
           events: [],
+          wishes: [],
         }),
     }),
     {

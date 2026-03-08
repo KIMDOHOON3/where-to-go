@@ -3,6 +3,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import DDayCard from "@/components/section/main/DDayCard";
+import StatsCard from "@/components/section/main/StatsCard";
 import MiniCalendar from "@/components/section/main/MiniCalendar";
 import MemoryGrid from "@/components/section/main/MemoryGrid";
 import AddMemoryModal from "@/components/modal/AddMemoryModal";
@@ -57,6 +58,7 @@ export default function HomeTab() {
   return (
     <Wrap>
       {startDate && <DDayCard startDate={startDate} title={coupleTitle} />}
+      <StatsCard />
       <MiniCalendar />
       <MemoryGrid
         memories={formattedMemories}
