@@ -30,6 +30,11 @@ interface CoupleState {
   // 커플 정보
   coupleTitle: string;
 
+  // 초대코드
+  myInviteCode: string | null;
+  partnerCode: string | null;
+  isConnected: boolean;
+
   // 추억 목록
   memories: Memory[];
 
@@ -40,6 +45,11 @@ interface CoupleState {
   setOnboarded: (value: boolean) => void;
   setStartDate: (date: Date) => void;
   setCoupleTitle: (title: string) => void;
+
+  // 초대코드 액션
+  setMyInviteCode: (code: string) => void;
+  setPartnerCode: (code: string) => void;
+  setConnected: (value: boolean) => void;
 
   // 추억 액션
   addMemory: (memory: Omit<Memory, "id">) => void;
@@ -61,12 +71,19 @@ export const useCoupleStore = create<CoupleState>()(
       isOnboarded: false,
       startDate: null,
       coupleTitle: "우리의 이야기",
+      myInviteCode: null,
+      partnerCode: null,
+      isConnected: false,
       memories: [],
       events: [],
 
       setOnboarded: (value) => set({ isOnboarded: value }),
       setStartDate: (date) => set({ startDate: date.toISOString() }),
       setCoupleTitle: (title) => set({ coupleTitle: title }),
+
+      setMyInviteCode: (code) => set({ myInviteCode: code }),
+      setPartnerCode: (code) => set({ partnerCode: code, isConnected: true }),
+      setConnected: (value) => set({ isConnected: value }),
 
       addMemory: (memory) =>
         set((state) => ({
@@ -91,6 +108,9 @@ export const useCoupleStore = create<CoupleState>()(
           isOnboarded: false,
           startDate: null,
           coupleTitle: "우리의 이야기",
+          myInviteCode: null,
+          partnerCode: null,
+          isConnected: false,
           memories: [],
           events: [],
         }),

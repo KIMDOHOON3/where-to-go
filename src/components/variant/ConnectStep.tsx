@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { useState } from "react";
 import Button from "@/components/ui/Button";
+import { useCoupleStore } from "@/store/useCoupleStore";
 
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(24px); }
@@ -146,6 +147,30 @@ const CopyBtn = styled.button`
   font-family: "Pretendard", sans-serif;
 `;
 
+const SkipBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b09490;
+  font-family: "Pretendard", sans-serif;
+  padding: 12px 0;
+  margin-top: 8px;
+
+  &:active {
+    opacity: 0.7;
+  }
+`;
+
+const ButtonGroup = styled.div`
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
@@ -159,14 +184,30 @@ export default function ConnectStep({ onNext }: Props) {
   const [myCode, setMyCode] = useState("");
   const [copied, setCopied] = useState(false);
 
+  const setMyInviteCode = useCoupleStore((state) => state.setMyInviteCode);
+  const setPartnerCode = useCoupleStore((state) => state.setPartnerCode);
+
   const handleGenerate = () => {
-    setMyCode(generateCode());
+    const newCode = generateCode();
+    setMyCode(newCode);
+    setMyInviteCode(newCode);
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(myCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleConnect = () => {
+    if (code.length >= 4) {
+      setPartnerCode(code);
+      onNext();
+    }
+  };
+
+  const handleSkip = () => {
+    onNext();
   };
 
   return (
@@ -199,16 +240,17 @@ export default function ConnectStep({ onNext }: Props) {
         <CopyBtn onClick={handleCopy}>{copied ? "복사됨!" : "복사"}</CopyBtn>
       </MyCode>
 
-      <div style={{ marginTop: "auto", paddingTop: 24 }}>
+      <ButtonGroup>
         <Button
-          onClick={onNext}
+          onClick={handleConnect}
           disabled={code.length < 4}
           variant={code.length >= 4 ? "primary" : "secondary"}
           fullWidth
         >
           연결하기
         </Button>
-      </div>
+        <SkipBtn onClick={handleSkip}>나중에 연결할게요</SkipBtn>
+      </ButtonGroup>
     </Wrap>
   );
 }
