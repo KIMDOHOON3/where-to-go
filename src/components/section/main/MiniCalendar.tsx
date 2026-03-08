@@ -2,13 +2,8 @@
 
 import styled from "@emotion/styled";
 import { useState } from "react";
-
-export interface DateEvent {
-  date: Date;
-  label: string;
-  emoji: string;
-  color?: string;
-}
+import { useCoupleStore } from "@/store/useCoupleStore";
+import AddEventModal from "@/components/modal/AddEventModal";
 
 const Wrap = styled.div`
   background: #fff;
@@ -101,13 +96,45 @@ const EventDot = styled.div<{ color: string }>`
   background: ${({ color }) => color};
 `;
 
+const EventSection = styled.div`
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f5eeec;
+`;
+
+const EventHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const EventTitle = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+`;
+
+const AddEventBtn = styled.button`
+  background: #fff5f4;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: #ffeae8;
+  }
+`;
+
 const EventBadges = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #f5eeec;
 `;
 
 const EventBadge = styled.div<{ color: string }>`
@@ -123,6 +150,13 @@ const EventBadge = styled.div<{ color: string }>`
   border: 1px solid ${({ color }) => color}30;
 `;
 
+const EmptyEvent = styled.p`
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  padding: 8px 0;
+`;
+
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 function getDaysInMonth(y: number, m: number) {
@@ -132,21 +166,14 @@ function getFirstDow(y: number, m: number) {
   return new Date(y, m, 1).getDay();
 }
 
-interface Props {
-  events?: DateEvent[];
-}
-
-const SAMPLE_EVENTS: DateEvent[] = [
-  { date: new Date(2024, 0, 18), label: "100일 기념일", emoji: "🎂", color: "#ef4444" },
-  { date: new Date(2024, 0, 20), label: "함정 데이트", emoji: "☕", color: "#f97316" },
-  { date: new Date(2024, 0, 18), label: "함정 데이트", emoji: "💑", color: "#ec4899" },
-];
-
-export default function MiniCalendar({ events = SAMPLE_EVENTS }: Props) {
+export default function MiniCalendar() {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [selected, setSelected] = useState<number | null>(today.getDate());
+  const [showModal, setShowModal] = useState(false);
+
+  const events = useCoupleStore((state) => state.events);
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth);
   const firstDow = getFirstDow(viewYear, viewMonth);
@@ -157,12 +184,14 @@ export default function MiniCalendar({ events = SAMPLE_EVENTS }: Props) {
   ];
 
   const getEventsForDay = (day: number) =>
-    events.filter(
-      (e) =>
-        e.date.getFullYear() === viewYear &&
-        e.date.getMonth() === viewMonth &&
-        e.date.getDate() === day
-    );
+    events.filter((e) => {
+      const eventDate = new Date(e.date);
+      return (
+        eventDate.getFullYear() === viewYear &&
+        eventDate.getMonth() === viewMonth &&
+        eventDate.getDate() === day
+      );
+    });
 
   const selectedEvents = selected ? getEventsForDay(selected) : [];
 
@@ -174,6 +203,8 @@ export default function MiniCalendar({ events = SAMPLE_EVENTS }: Props) {
     if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0); }
     else setViewMonth(m => m + 1);
   };
+
+  const selectedDate = selected ? new Date(viewYear, viewMonth, selected) : null;
 
   return (
     <Wrap>
@@ -215,14 +246,36 @@ export default function MiniCalendar({ events = SAMPLE_EVENTS }: Props) {
         })}
       </Grid>
 
-      {selectedEvents.length > 0 && (
-        <EventBadges>
-          {selectedEvents.map((e, i) => (
-            <EventBadge key={i} color={e.color ?? "#ef4444"}>
-              {e.emoji} {e.label}
-            </EventBadge>
-          ))}
-        </EventBadges>
+      {selected && (
+        <EventSection>
+          <EventHeader>
+            <EventTitle>
+              {viewMonth + 1}월 {selected}일
+            </EventTitle>
+            <AddEventBtn onClick={() => setShowModal(true)}>
+              + 기념일 추가
+            </AddEventBtn>
+          </EventHeader>
+
+          {selectedEvents.length > 0 ? (
+            <EventBadges>
+              {selectedEvents.map((e) => (
+                <EventBadge key={e.id} color={e.color ?? "#ef4444"}>
+                  {e.emoji} {e.label}
+                </EventBadge>
+              ))}
+            </EventBadges>
+          ) : (
+            <EmptyEvent>등록된 기념일이 없습니다</EmptyEvent>
+          )}
+        </EventSection>
+      )}
+
+      {showModal && selectedDate && (
+        <AddEventModal
+          selectedDate={selectedDate}
+          onClose={() => setShowModal(false)}
+        />
       )}
     </Wrap>
   );

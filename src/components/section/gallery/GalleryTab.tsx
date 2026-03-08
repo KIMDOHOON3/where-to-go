@@ -3,7 +3,8 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import MemoryGrid from "@/components/section/main/MemoryGrid";
-import { SAMPLE_MEMORIES } from "@/components/section/main/MemoryGrid";
+import AddMemoryModal from "@/components/modal/AddMemoryModal";
+import { useCoupleStore } from "@/store/useCoupleStore";
 
 const Wrap = styled.div`
   flex: 1;
@@ -56,11 +57,18 @@ const AddBtn = styled.button`
 
 export default function GalleryTab() {
   const [activeFilter, setActiveFilter] = useState("전체");
+  const [showModal, setShowModal] = useState(false);
+  const memories = useCoupleStore((state) => state.memories);
 
-  const filtered =
-    activeFilter === "전체"
-      ? SAMPLE_MEMORIES
-      : SAMPLE_MEMORIES.filter((m) => m.location === activeFilter);
+  // store memories를 MemoryGrid 형식으로 변환
+  const formattedMemories = memories.map((m) => ({
+    ...m,
+    date: new Date(m.date).toLocaleDateString("ko-KR", {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+    }).replace(/\. /g, ".").replace(/\.$/, ""),
+  }));
 
   return (
     <Wrap>
@@ -71,14 +79,16 @@ export default function GalleryTab() {
 
       <GridWrap>
         <MemoryGrid
-          memories={filtered}
+          memories={formattedMemories}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
           showAll
         />
       </GridWrap>
 
-      <AddBtn>+ 새 추억 등록</AddBtn>
+      <AddBtn onClick={() => setShowModal(true)}>+ 새 추억 등록</AddBtn>
+
+      {showModal && <AddMemoryModal onClose={() => setShowModal(false)} />}
     </Wrap>
   );
 }
