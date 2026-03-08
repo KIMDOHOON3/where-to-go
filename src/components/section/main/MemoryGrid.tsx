@@ -142,6 +142,7 @@ interface Props {
   activeFilter?: string;
   onFilterChange?: (f: string) => void;
   showAll?: boolean;
+  onMemoryClick?: (memory: Memory) => void;
 }
 
 export default function MemoryGrid({
@@ -149,6 +150,7 @@ export default function MemoryGrid({
   activeFilter = "전체",
   onFilterChange,
   showAll = false,
+  onMemoryClick,
 }: Props) {
   // 위치 목록 동적 생성
   const locations = ["전체", ...Array.from(new Set(memories.map((m) => m.location)))];
@@ -184,7 +186,11 @@ export default function MemoryGrid({
       {displayed.length > 0 ? (
         <Grid>
           {displayed.map((m) => (
-            <MemoryCard key={m.id} color={m.color}>
+            <MemoryCard
+              key={m.id}
+              color={m.color}
+              onClick={() => onMemoryClick?.(m)}
+            >
               <MemoryImg color={m.color}>{m.emoji}</MemoryImg>
               <MemoryInfo>
                 <MemoryTitle>{m.title}</MemoryTitle>

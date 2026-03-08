@@ -4,6 +4,15 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { useCoupleStore } from "@/store/useCoupleStore";
 import AddEventModal from "@/components/modal/AddEventModal";
+import EventDetailModal from "@/components/modal/EventDetailModal";
+
+interface DateEvent {
+  id: string;
+  date: string;
+  label: string;
+  emoji: string;
+  color: string;
+}
 
 const Wrap = styled.div`
   background: #fff;
@@ -137,7 +146,7 @@ const EventBadges = styled.div`
   gap: 6px;
 `;
 
-const EventBadge = styled.div<{ color: string }>`
+const EventBadge = styled.button<{ color: string }>`
   display: flex;
   align-items: center;
   gap: 4px;
@@ -148,6 +157,13 @@ const EventBadge = styled.div<{ color: string }>`
   font-weight: 600;
   color: #333;
   border: 1px solid ${({ color }) => color}30;
+  cursor: pointer;
+  font-family: "Pretendard", sans-serif;
+  transition: all 0.15s;
+
+  &:hover {
+    background: ${({ color }) => color}30;
+  }
 `;
 
 const EmptyEvent = styled.p`
@@ -172,6 +188,7 @@ export default function MiniCalendar() {
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [selected, setSelected] = useState<number | null>(today.getDate());
   const [showModal, setShowModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<DateEvent | null>(null);
 
   const events = useCoupleStore((state) => state.events);
 
@@ -260,7 +277,11 @@ export default function MiniCalendar() {
           {selectedEvents.length > 0 ? (
             <EventBadges>
               {selectedEvents.map((e) => (
-                <EventBadge key={e.id} color={e.color ?? "#ef4444"}>
+                <EventBadge
+                  key={e.id}
+                  color={e.color ?? "#ef4444"}
+                  onClick={() => setSelectedEvent(e)}
+                >
                   {e.emoji} {e.label}
                 </EventBadge>
               ))}
@@ -275,6 +296,13 @@ export default function MiniCalendar() {
         <AddEventModal
           selectedDate={selectedDate}
           onClose={() => setShowModal(false)}
+        />
+      )}
+
+      {selectedEvent && (
+        <EventDetailModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
         />
       )}
     </Wrap>
