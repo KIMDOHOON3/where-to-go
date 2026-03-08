@@ -5,6 +5,7 @@ import { useState } from "react";
 import DDayCard from "@/components/section/main/DDayCard";
 import MiniCalendar from "@/components/section/main/MiniCalendar";
 import MemoryGrid from "@/components/section/main/MemoryGrid";
+import { useCoupleStore, useStartDate } from "@/store/useCoupleStore";
 
 const Wrap = styled.div`
   flex: 1;
@@ -35,15 +36,14 @@ const AddBtn = styled.button`
   &:active { transform: scale(0.98); }
 `;
 
-// 시작일 — 실제 앱에서는 전역 상태에서 가져옴
-const START_DATE = new Date(2023, 9, 15); // 2023.10.15
-
 export default function HomeTab() {
   const [activeFilter, setActiveFilter] = useState("전체");
+  const startDate = useStartDate();
+  const coupleTitle = useCoupleStore((state) => state.coupleTitle);
 
   return (
     <Wrap>
-      <DDayCard startDate={START_DATE} title="우리의 이야기" />
+      {startDate && <DDayCard startDate={startDate} title={coupleTitle} />}
       <MiniCalendar />
       <MemoryGrid
         activeFilter={activeFilter}
