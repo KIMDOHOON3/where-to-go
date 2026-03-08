@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 
-export type TabType = "home" | "calendar" | "gallery" | "more";
+export type TabType = "home" | "calendar" | "gallery" | "wish" | "more";
 
 interface NavItem {
   id: TabType;
@@ -15,6 +15,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "home", label: "홈", icon: "🏠", activeIcon: "🏠" },
   { id: "calendar", label: "캘린더", icon: "📅", activeIcon: "📅" },
   { id: "gallery", label: "사진첩", icon: "🖼️", activeIcon: "🖼️" },
+  { id: "wish", label: "위시", icon: "💝", activeIcon: "💝" },
   { id: "more", label: "더보기", icon: "···", activeIcon: "···" },
 ];
 

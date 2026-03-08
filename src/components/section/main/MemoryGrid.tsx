@@ -11,17 +11,6 @@ export interface Memory {
   color: string;
 }
 
-export const SAMPLE_MEMORIES: Memory[] = [
-  { id: "1", title: "대전 여행", location: "대전", date: "23.11.10", emoji: "🌳", color: "#a3d9a5" },
-  { id: "2", title: "함정 카페", location: "함정", date: "24.01.10", emoji: "☕", color: "#f4c997" },
-  { id: "3", title: "함정 데이트", location: "함정", date: "24.01.10", emoji: "🌊", color: "#93c5fd" },
-  { id: "4", title: "브런치", location: "서울", date: "24.01.15", emoji: "🥐", color: "#fde68a" },
-  { id: "5", title: "제주 여행", location: "제주", date: "24.01.20", emoji: "🍊", color: "#fca5a5" },
-  { id: "6", title: "한강 피크닉", location: "서울", date: "24.01.22", emoji: "🌸", color: "#d8b4fe" },
-];
-
-const LOCATIONS = ["전체", "대전", "함정", "서울", "제주"];
-
 const Wrap = styled.div`
   padding: 0 16px;
 `;
@@ -127,19 +116,45 @@ const MemoryMeta = styled.p`
   gap: 2px;
 `;
 
+const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+`;
+
+const EmptyEmoji = styled.span`
+  font-size: 48px;
+  margin-bottom: 16px;
+`;
+
+const EmptyText = styled.p`
+  font-size: 15px;
+  color: #999;
+  font-weight: 500;
+  line-height: 1.5;
+`;
+
 interface Props {
   memories?: Memory[];
   activeFilter?: string;
   onFilterChange?: (f: string) => void;
   showAll?: boolean;
+  onMemoryClick?: (memory: Memory) => void;
 }
 
 export default function MemoryGrid({
-  memories = SAMPLE_MEMORIES,
+  memories = [],
   activeFilter = "전체",
   onFilterChange,
   showAll = false,
+  onMemoryClick,
 }: Props) {
+  // 위치 목록 동적 생성
+  const locations = ["전체", ...Array.from(new Set(memories.map((m) => m.location)))];
+
   const filtered =
     activeFilter === "전체"
       ? memories
@@ -153,30 +168,46 @@ export default function MemoryGrid({
         <SectionTitle>추억 사진첩</SectionTitle>
       </SectionHeader>
 
-      <FilterRow>
-        {LOCATIONS.map((loc) => (
-          <FilterChip
-            key={loc}
-            active={activeFilter === loc}
-            onClick={() => onFilterChange?.(loc)}
-          >
-            {loc === activeFilter && loc !== "전체" ? "📍" : ""}
-            {loc}
-          </FilterChip>
-        ))}
-      </FilterRow>
+      {memories.length > 0 && (
+        <FilterRow>
+          {locations.map((loc) => (
+            <FilterChip
+              key={loc}
+              active={activeFilter === loc}
+              onClick={() => onFilterChange?.(loc)}
+            >
+              {loc === activeFilter && loc !== "전체" ? "📍" : ""}
+              {loc}
+            </FilterChip>
+          ))}
+        </FilterRow>
+      )}
 
-      <Grid>
-        {displayed.map((m) => (
-          <MemoryCard key={m.id} color={m.color}>
-            <MemoryImg color={m.color}>{m.emoji}</MemoryImg>
-            <MemoryInfo>
-              <MemoryTitle>{m.title}</MemoryTitle>
-              <MemoryMeta>📍{m.location} {m.date}</MemoryMeta>
-            </MemoryInfo>
-          </MemoryCard>
-        ))}
-      </Grid>
+      {displayed.length > 0 ? (
+        <Grid>
+          {displayed.map((m) => (
+            <MemoryCard
+              key={m.id}
+              color={m.color}
+              onClick={() => onMemoryClick?.(m)}
+            >
+              <MemoryImg color={m.color}>{m.emoji}</MemoryImg>
+              <MemoryInfo>
+                <MemoryTitle>{m.title}</MemoryTitle>
+                <MemoryMeta>📍{m.location} {m.date}</MemoryMeta>
+              </MemoryInfo>
+            </MemoryCard>
+          ))}
+        </Grid>
+      ) : (
+        <EmptyState>
+          <EmptyEmoji>📸</EmptyEmoji>
+          <EmptyText>
+            아직 등록된 추억이 없어요<br />
+            첫 추억을 등록해보세요!
+          </EmptyText>
+        </EmptyState>
+      )}
     </Wrap>
   );
 }

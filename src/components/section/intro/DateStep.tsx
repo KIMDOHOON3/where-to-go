@@ -5,6 +5,7 @@ import { keyframes } from "@emotion/react";
 import { useState } from "react";
 import Button from "@/components/ui/Button";
 import Calendar from "@/components/variant/Calendar";
+import { useCoupleStore } from "@/store/useCoupleStore";
 
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(24px); }
@@ -43,6 +44,14 @@ interface Props {
 
 export default function DateStep({ onNext }: Props) {
   const [selected, setSelected] = useState<Date | null>(null);
+  const setStartDate = useCoupleStore((state) => state.setStartDate);
+
+  const handleNext = () => {
+    if (selected) {
+      setStartDate(selected); // store에 저장
+      onNext(selected);
+    }
+  };
 
   return (
     <Wrap>
@@ -54,7 +63,7 @@ export default function DateStep({ onNext }: Props) {
 
       <div style={{ marginTop: "auto", paddingTop: 28 }}>
         <Button
-          onClick={() => selected && onNext(selected)}
+          onClick={handleNext}
           disabled={!selected}
           variant={selected ? "primary" : "secondary"}
           fullWidth
